@@ -25,22 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
  * Initializes and manages dark/light mode themes
  */
 function initTheme() {
+    // Force dark mode always
+    const darkTheme = 'dark';
+    document.documentElement.setAttribute('data-theme', darkTheme);
+    localStorage.setItem('kyro-theme', darkTheme);
+    updateThemeIcon(darkTheme);
+    // Remove theme toggle button if present
     const themeToggleBtn = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('kyro-theme') || 'light';
-    
-    // Set initial theme
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateThemeIcon(currentTheme);
-
     if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            const activeTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = activeTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('kyro-theme', newTheme);
-            updateThemeIcon(newTheme);
-        });
+        themeToggleBtn.style.display = 'none';
     }
 }
 
@@ -48,15 +41,7 @@ function initTheme() {
  * Updates the theme switcher button icon (Sun or Moon)
  */
 function updateThemeIcon(theme) {
-    const toggleBtn = document.getElementById('theme-toggle');
-    if (!toggleBtn) return;
-    
-    if (theme === 'dark') {
-        toggleBtn.innerHTML = `<i data-lucide="sun"></i>`;
-    } else {
-        toggleBtn.innerHTML = `<i data-lucide="moon"></i>`;
-    }
-    
+    // No toggle UI needed for dark‑only mode; ensure icons are generated if needed elsewhere
     if (window.lucide) {
         window.lucide.createIcons();
     }
