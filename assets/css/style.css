@@ -398,7 +398,7 @@ footer {
 
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
     margin-bottom: 56px;
 }
@@ -1293,6 +1293,42 @@ tr:hover td {
 .mb-4 { margin-bottom: 16px; }
 .mr-2 { margin-right: 8px; }
 
+/* Mobile Menu Hamburger Button */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    width: 42px;
+    height: 42px;
+}
+
+.mobile-menu-btn:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-hover);
+}
+
+/* Scrollable Preview Table Wrapper */
+.preview-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 16px;
+    border-radius: var(--radius-sm);
+}
+
+/* Page Overflow Protection */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .hero-section h1 {
@@ -1303,24 +1339,42 @@ tr:hover td {
         font-size: 1.0rem !important;
     }
     
+    /* Hide nav links on mobile; toggle active displays it as overlay */
     .nav-links {
-        display: flex !important;
-        gap: 8px !important;
-        overflow-x: auto !important;
-        padding: 4px 0 !important;
-        max-width: 60% !important;
-        -webkit-overflow-scrolling: touch !important;
-        scrollbar-width: none !important;
+        display: none !important;
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        background-color: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+        flex-direction: column;
+        padding: 24px;
+        gap: 12px;
+        box-shadow: var(--shadow-lg);
+        z-index: 99;
+        max-width: 100% !important;
+        animation: slideDownMenu 0.3s ease-out forwards;
     }
     
-    .nav-links::-webkit-scrollbar {
-        display: none !important;
+    .nav-links.active {
+        display: flex !important;
     }
     
     .nav-link {
-        font-size: 0.8rem !important;
-        padding: 6px 10px !important;
-        white-space: nowrap !important;
+        font-size: 1.0rem !important;
+        padding: 12px !important;
+        width: 100% !important;
+        text-align: center !important;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .nav-link:last-child {
+        border-bottom: none;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
     }
     
     .logo {
@@ -1330,6 +1384,11 @@ tr:hover td {
     .invoice-preview-box {
         padding: 20px !important;
     }
+}
+
+@keyframes slideDownMenu {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 600px) {
@@ -1366,5 +1425,11 @@ tr:hover td {
 @media (max-width: 480px) {
     .gst-rates-grid {
         grid-template-columns: repeat(3, 1fr) !important;
+    }
+    
+    .invoice-summary-box {
+        width: 100% !important;
+        max-width: 280px !important;
+        margin-left: auto;
     }
 }

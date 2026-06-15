@@ -64,6 +64,9 @@
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <i data-lucide="moon"></i>
                 </button>
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu">
+                    <i data-lucide="menu"></i>
+                </button>
                 <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
                     Back Hub
                 </a>
@@ -252,20 +255,22 @@ GSTIN: 29AAAAA1111A1Z1</p>
                     </div>
 
                     <!-- Items Table -->
-                    <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
-                        <thead>
-                            <tr>
-                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem;">Description</th>
-                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: center;">Qty</th>
-                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Rate</th>
-                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Tax %</th>
-                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="preview-table-body">
-                            <!-- Items populated dynamically -->
-                        </tbody>
-                    </table>
+                    <div class="preview-table-wrapper">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem;">Description</th>
+                                    <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: center;">Qty</th>
+                                    <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Rate</th>
+                                    <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Tax %</th>
+                                    <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="preview-table-body">
+                                <!-- Items populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
 
                     <!-- Summary Area -->
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 24px;">

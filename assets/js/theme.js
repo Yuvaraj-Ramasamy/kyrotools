@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Stats Counters
     initStats();
 
+    // Initialize Hamburger Mobile Menu
+    initMobileMenu();
+
     // Create Lucide Icons
     if (window.lucide) {
         window.lucide.createIcons();
@@ -136,4 +139,31 @@ function updateDashboardCounters() {
             el.innerText = elements[id];
         }
     });
+}
+
+/**
+ * Handles mobile hamburger dropdown events
+ */
+function initMobileMenu() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinks.classList.toggle('active');
+            const isActive = navLinks.classList.contains('active');
+            menuBtn.innerHTML = isActive ? `<i data-lucide="x"></i>` : `<i data-lucide="menu"></i>`;
+            if (window.lucide) window.lucide.createIcons();
+        });
+
+        // Close menu when clicking outside or clicking any nav link
+        document.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+                menuBtn.innerHTML = `<i data-lucide="menu"></i>`;
+                if (window.lucide) window.lucide.createIcons();
+            }
+        });
+    }
 }
