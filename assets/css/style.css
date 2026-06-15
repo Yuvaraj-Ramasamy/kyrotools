@@ -1296,14 +1296,75 @@ tr:hover td {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .hero-section h1 {
-        font-size: 2.25rem;
+        font-size: 2.0rem !important;
+    }
+    
+    .hero-section p {
+        font-size: 1.0rem !important;
     }
     
     .nav-links {
-        display: none; /* Mobile menu can toggle or simplify */
+        display: flex !important;
+        gap: 8px !important;
+        overflow-x: auto !important;
+        padding: 4px 0 !important;
+        max-width: 60% !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+    }
+    
+    .nav-links::-webkit-scrollbar {
+        display: none !important;
+    }
+    
+    .nav-link {
+        font-size: 0.8rem !important;
+        padding: 6px 10px !important;
+        white-space: nowrap !important;
+    }
+    
+    .logo {
+        font-size: 1.3rem !important;
     }
     
     .invoice-preview-box {
-        padding: 20px;
+        padding: 20px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .item-list-header {
+        display: none !important;
+    }
+    
+    .item-list-row {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) auto !important;
+        gap: 8px !important;
+        border: 1px solid var(--border-color) !important;
+        padding: 16px !important;
+        border-radius: var(--radius-md) !important;
+        background-color: var(--bg-tertiary) !important;
+        margin-bottom: 16px !important;
+    }
+    
+    .item-list-row .item-desc {
+        grid-column: 1 / -1 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .nav-actions .btn {
+        display: none !important;
+    }
+    
+    .nav-container {
+        gap: 8px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .gst-rates-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
     }
 }
