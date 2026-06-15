@@ -147,14 +147,21 @@ function updateDashboardCounters() {
 function initMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
+    const body = document.body;
 
     if (menuBtn && navLinks) {
         menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            navLinks.classList.toggle('active');
-            const isActive = navLinks.classList.contains('active');
+            const isActive = navLinks.classList.toggle('active');
+            // Update button icon
             menuBtn.innerHTML = isActive ? `<i data-lucide="x"></i>` : `<i data-lucide="menu"></i>`;
             if (window.lucide) window.lucide.createIcons();
+            // Lock/unlock body scroll
+            if (isActive) {
+                body.classList.add('menu-open');
+            } else {
+                body.classList.remove('menu-open');
+            }
         });
 
         // Close menu when clicking outside or clicking any nav link
@@ -163,7 +170,9 @@ function initMobileMenu() {
                 navLinks.classList.remove('active');
                 menuBtn.innerHTML = `<i data-lucide="menu"></i>`;
                 if (window.lucide) window.lucide.createIcons();
+                body.classList.remove('menu-open');
             }
         });
     }
 }
+
