@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GST Calculator India - Inclusive & Exclusive Tax | Kyro</title>
+    
+    <script>
+        // Prevent theme flash of light unstyled content (FOUC)
+        (function() {
+            const theme = localStorage.getItem('kyro-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Calculate GST Inclusive and Exclusive tax rates instantly online. Supports standard Indian tax rates (3%, 5%, 12%, 18%, 28%) with automatic CGST, SGST, and IGST breakdowns.">
+    <meta name="keywords" content="gst calculator, inclusive gst calculator, exclusive tax calculator, cgst sgst calculator, indian gst calculator online">
+    <meta name="author" content="Kyro Core Technologies">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Kyro GST Calculator",
+      "operatingSystem": "All",
+      "applicationCategory": "BusinessApplication",
+      "description": "Calculate GST amounts with inclusive/exclusive modes, CGST/SGST splits and standard tax brackets (3%, 5%, 12%, 18%, 28%).",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="invoice-generator.html" class="nav-link">Invoice</a>
+                <a href="quotation-generator.html" class="nav-link">Quotation</a>
+                <a href="gst-calculator.html" class="nav-link active">GST</a>
+                <a href="emi-calculator.html" class="nav-link">EMI</a>
+                <a href="pdf-merger.html" class="nav-link">PDF Suite</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i data-lucide="moon"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
+                    Back Hub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="container">
+        <!-- Main title -->
+        <div class="hero-section" style="margin-bottom: 40px;">
+            <h1 style="font-size: 2.5rem;">GST Calculator India</h1>
+            <p>Calculate Goods and Services Tax (GST) values instantly. Split calculations between Central and State categories.</p>
+        </div>
+
+        <div class="tool-layout">
+            <!-- Left Side: Interactive Calculations Controls -->
+            <div class="tool-workspace">
+                <div class="card">
+                    <!-- GST Calculation Type -->
+                    <div class="form-group">
+                        <label>GST Calculation Mode</label>
+                        <div style="display: flex; gap: 12px; margin-top: 6px;">
+                            <button id="mode-exclusive" class="btn btn-primary" style="flex: 1; padding: 12px 10px;">
+                                GST Exclusive (Add GST)
+                            </button>
+                            <button id="mode-inclusive" class="btn btn-secondary" style="flex: 1; padding: 12px 10px;">
+                                GST Inclusive (Remove GST)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Input Amount -->
+                    <div class="form-group">
+                        <label for="gst-amount" id="amount-label">Amount (exclusive of tax)</label>
+                        <div class="input-addon-group">
+                            <span class="input-addon">₹</span>
+                            <input type="number" id="gst-amount" placeholder="Enter amount" min="0" value="10000" style="font-size: 1.1rem; font-weight: 600;">
+                        </div>
+                    </div>
+
+                    <!-- Standard Tax Rates Selector -->
+                    <div class="form-group">
+                        <label>GST Rate (%)</label>
+                        <div class="gst-rates-grid">
+                            <button class="gst-rate-btn" data-rate="3">3%</button>
+                            <button class="gst-rate-btn" data-rate="5">5%</button>
+                            <button class="gst-rate-btn" data-rate="12">12%</button>
+                            <button class="gst-rate-btn active" data-rate="18">18%</button>
+                            <button class="gst-rate-btn" data-rate="28">28%</button>
+                        </div>
+                        
+                        <!-- Custom GST Input -->
+                        <div class="mt-4" style="display: flex; align-items: center; gap: 12px;">
+                            <label for="gst-custom-rate" style="margin-bottom: 0; white-space: nowrap;">Or Custom Rate:</label>
+                            <div class="input-addon-group" style="width: 120px;">
+                                <input type="number" id="gst-custom-rate" placeholder="18" min="0" max="100" step="0.1">
+                                <span class="input-addon" style="border-left: 0; border-radius: 0 var(--radius-md) var(--radius-md) 0;">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Realtime Results & Split Breakdown -->
+            <div>
+                <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <h2 class="mb-4" style="font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="calculator" style="color: var(--success);"></i> GST Calculation Result
+                        </h2>
+                        
+                        <div class="gst-breakdown">
+                            <div class="gst-breakdown-row">
+                                <span id="label-base">Base Amount (Net):</span>
+                                <span id="val-base" style="font-weight: 600;">₹10,000.00</span>
+                            </div>
+                            <div class="gst-breakdown-row">
+                                <span>CGST (Central Tax):</span>
+                                <span id="val-cgst" style="font-weight: 500;">₹900.00</span>
+                            </div>
+                            <div class="gst-breakdown-row">
+                                <span>SGST (State Tax):</span>
+                                <span id="val-sgst" style="font-weight: 500;">₹900.00</span>
+                            </div>
+                            <div class="gst-breakdown-row">
+                                <span>IGST (Integrated Tax):</span>
+                                <span id="val-igst" style="font-weight: 500;">₹1,800.00</span>
+                            </div>
+                            <div class="gst-breakdown-row">
+                                <span>Total GST Tax:</span>
+                                <span id="val-tax" style="font-weight: 600; color: var(--secondary);">₹1,800.00</span>
+                            </div>
+                            <div class="gst-breakdown-row">
+                                <span id="label-total" style="font-size: 1.1rem;">Total Bill Value (Gross):</span>
+                                <span id="val-total">₹11,800.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4" style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                        <strong>Tax Splitting Note:</strong> Intrastate deals split the total GST equally into CGST & SGST. Interstate operations apply the entire GST value directly as IGST.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO Landing Details -->
+        <section class="seo-section">
+            <h2 class="seo-title">GST Calculator India (Goods & Services Tax)</h2>
+            <p class="seo-subtitle">Compute accurate business taxes online. Perfect for manufacturers, distributors, shop owners, retail merchants, and services consultants under the Indian GST system.</p>
+            
+            <div class="seo-content-grid">
+                <div class="seo-card">
+                    <h3>Understanding GST Inclusive vs Exclusive</h3>
+                    <p><strong>GST Exclusive</strong>: Calculated when you have a base catalog item value and need to add tax to compute the final bill value. The formula adds tax as: <em>Amount × (Rate / 100)</em>.</p>
+                    <p><strong>GST Inclusive</strong>: Calculated when the total price paid already includes tax (such as standard consumer items), and you want to extract the underlying base price. The base formula is: <em>Gross Value / (1 + (Rate / 100))</em>.</p>
+                </div>
+                <div class="seo-card">
+                    <h3>Standard Tax Rate Slabs in India</h3>
+                    <p>India enforces 5 main percentage slabs:</p>
+                    <ul>
+                        <li><strong>3%</strong>: Gold, precious stones, jewellery.</li>
+                        <li><strong>5%</strong>: Essential goods, packaged foodstuffs.</li>
+                        <li><strong>12%</strong>: Processed foods, business services, mobile phones.</li>
+                        <li><strong>18%</strong>: IT consulting, software services, restaurants, luxury items.</li>
+                        <li><strong>28%</strong>: Cars, cement, high-luxury consumables.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FAQs Accordion -->
+            <div class="faq-accordion">
+                <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What are CGST, SGST, and IGST?</div>
+                    <div class="faq-answer"><strong>CGST</strong> (Central GST) and <strong>SGST</strong> (State GST) are levied on sales occurring inside the same state (intrastate transactions), splitting the tax revenue equally. <strong>IGST</strong> (Integrated GST) is charged for interstate commerce (sales between states), with revenue collected by the Central Government.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Are custom rates supported?</div>
+                    <div class="faq-answer">Yes. If you deal with specific items outside the standard grids, simply type your percentage into the "Custom Rate" input box to calculate instantly.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is the calculations data stored anywhere?</div>
+                    <div class="faq-answer">No. All calculations are executed dynamically in your local JavaScript interpreter inside your browser. No cookies, session records, or servers are involved.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Kyro Business Tools. All rights reserved. Designed and developed by Kyro Core Technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Theme Manager -->
+    <script src="assets/js/theme.js"></script>
+    <!-- GST Handler -->
+    <script src="assets/js/gst.js"></script>
+</body>
+</html>

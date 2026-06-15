@@ -1,0 +1,111 @@
+/* ==========================================
+   PRINT OPTIMIZED STYLES FOR INVOICE & QUOTATION
+   ========================================== */
+@media print {
+    /* Hide everything except the invoice preview box */
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 12pt !important;
+        line-height: 1.3 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    header,
+    footer,
+    .btn,
+    .nav-actions,
+    .tool-workspace, /* Hide the form builder column */
+    .seo-section,
+    .faq-accordion,
+    .modal-overlay,
+    .pdf-tabs {
+        display: none !important;
+    }
+
+    /* Force the printed layout to span the whole page width */
+    .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .tool-layout {
+        display: block !important;
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+
+    .invoice-preview-container {
+        position: relative !important;
+        top: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .invoice-preview-box {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        min-height: auto !important;
+        background: transparent !important;
+        color: #000000 !important;
+    }
+
+    /* Template specific print settings */
+    .invoice-preview-box.template-classic {
+        border-top: 6px solid #334155 !important;
+    }
+
+    .invoice-preview-box.template-modern {
+        border-top: 6px solid #6366f1 !important;
+    }
+
+    .invoice-preview-box.template-bold {
+        border-left: 6px solid #ec4899 !important;
+    }
+
+    .invoice-header {
+        border-bottom: 2px solid #000000 !important;
+        padding-bottom: 15px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .summary-row.total {
+        border-top: 2px solid #000000 !important;
+    }
+
+    th {
+        background-color: #f1f5f9 !important;
+        color: #000000 !important;
+        border-bottom: 1px solid #000000 !important;
+    }
+
+    td {
+        border-bottom: 1px solid #e2e8f0 !important;
+    }
+
+    /* Print page configurations */
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+
+    /* Prevent breaking inside headers, elements, tables */
+    tr {
+        page-break-inside: avoid !important;
+    }
+
+    .invoice-parties,
+    .invoice-details-grid {
+        page-break-inside: avoid !important;
+    }
+}

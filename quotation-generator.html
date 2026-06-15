@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Quotation Generator - Free PDF Exports | Kyro</title>
+    
+    <script>
+        // Prevent theme flash of light unstyled content (FOUC)
+        (function() {
+            const theme = localStorage.getItem('kyro-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Generate formal B2B client price estimates and quotes online for free. Custom templates, validity dates, logo branding, and automatic tax calculators.">
+    <meta name="keywords" content="online quotation generator, price estimate maker, business quotes builder, client quotation PDF, free estimate generator">
+    <meta name="author" content="Kyro Core Technologies">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/print.css" media="print">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Kyro Free Quotation Builder",
+      "operatingSystem": "All",
+      "applicationCategory": "BusinessApplication",
+      "description": "Create, customize, and export professional client quotes and estimations. Supports validity configurations, tax calculators, logo uploads, and printable PDF documents.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="invoice-generator.html" class="nav-link">Invoice</a>
+                <a href="quotation-generator.html" class="nav-link active">Quotation</a>
+                <a href="gst-calculator.html" class="nav-link">GST</a>
+                <a href="emi-calculator.html" class="nav-link">EMI</a>
+                <a href="pdf-merger.html" class="nav-link">PDF Suite</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i data-lucide="moon"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
+                    Back Hub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="container">
+        <div class="tool-layout">
+            <!-- Left Side: Interactive Quotation Builder Form -->
+            <div class="tool-workspace">
+                <div class="card">
+                    <h2 class="mb-4" style="font-size: 1.5rem; display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="edit-3" style="color: var(--secondary);"></i> Quotation Details
+                    </h2>
+                    
+                    <!-- Branding & Logo -->
+                    <div class="form-group">
+                        <label>Company Branding (Upload Logo)</label>
+                        <div class="upload-zone" id="logo-dropzone">
+                            <i data-lucide="image"></i>
+                            <p>Drag your company logo here or <strong>browse files</strong></p>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Recommended: PNG or JPG, Square format</span>
+                            <input type="file" id="logo-input" class="file-input" accept="image/*">
+                        </div>
+                        <div id="logo-preview-badge" style="display: none; align-items: center; justify-content: space-between; background: var(--bg-tertiary); padding: 8px 12px; margin-top: 8px; border-radius: var(--radius-sm);">
+                            <span style="font-size: 0.85rem; font-weight: 600;">Logo Uploaded</span>
+                            <button id="remove-logo-btn" class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;">Delete</button>
+                        </div>
+                    </div>
+
+                    <!-- Meta details -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quote-number">Quotation Number</label>
+                            <input type="text" id="quote-number" value="QTN-2026-001">
+                        </div>
+                        <div class="form-group">
+                            <label for="quote-currency">Currency</label>
+                            <select id="quote-currency">
+                                <option value="INR">INR (₹)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="AUD">AUD ($)</option>
+                                <option value="CAD">CAD ($)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quote-date">Quotation Date</label>
+                            <input type="date" id="quote-date">
+                        </div>
+                        <div class="form-group">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label for="quote-validity" style="margin-bottom: 0;">Valid Until</label>
+                                <label style="margin-bottom: 0; display: inline-flex; align-items: center; font-size: 0.8rem; font-weight: normal; cursor: pointer; color: var(--primary);">
+                                    <input type="checkbox" id="toggle-validity-date" checked style="margin-right: 4px; width: auto; cursor: pointer;"> Include
+                                </label>
+                            </div>
+                            <input type="date" id="quote-validity">
+                        </div>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
+
+                    <!-- Parties Involved -->
+                    <h3 class="mb-4" style="font-size: 1.2rem;">Parties Info</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>From (Provider)</label>
+                            <input type="text" id="sender-name" placeholder="Company / Provider Name" value="Kyro Core Technologies">
+                            <textarea id="sender-address" rows="3" placeholder="Billing Address, GSTIN" class="mt-4">120 Business Ave, Suite 300&#10;Bangalore, Karnataka&#10;GSTIN: 29AAAAA1111A1Z1</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>To (Prospect Client)</label>
+                            <input type="text" id="client-name" placeholder="Prospect Name / Business">
+                            <textarea id="client-address" rows="3" placeholder="Prospect Address" class="mt-4"></textarea>
+                        </div>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
+
+                    <!-- Line Items -->
+                    <div class="section-header">
+                        <h3 style="font-size: 1.2rem;">Estimated Items</h3>
+                        <button id="add-item-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
+                            <i data-lucide="plus" style="width: 14px; height: 14px;"></i> Add Item
+                        </button>
+                    </div>
+
+                    <div id="item-list-container">
+                        <div class="item-list-header">
+                            <div>Description</div>
+                            <div>Qty</div>
+                            <div>Rate</div>
+                            <div>Tax (GST %)</div>
+                            <div></div>
+                        </div>
+                        
+                        <!-- Dynamic rows injected here -->
+                    </div>
+
+                    <!-- Discount & Tax Types -->
+                    <div class="form-row mt-4">
+                        <div class="form-group">
+                            <label for="discount-val">Discount (%)</label>
+                            <input type="number" id="discount-val" value="0" min="0" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="tax-type">GST Split Type</label>
+                            <select id="tax-type">
+                                <option value="cgst-sgst">Intra-state (CGST + SGST)</option>
+                                <option value="igst">Inter-state (IGST)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <div class="form-group">
+                        <label for="quote-terms">Terms & Validity Notes</label>
+                        <textarea id="quote-terms" rows="3" placeholder="Enter quote dependencies, delivery times, etc.">Estimation is valid for 30 days.&#10;50% Advance payment required on approval.&#10;Delivery within 4-6 weeks from confirmation.</textarea>
+                    </div>
+                </div>
+
+                <!-- Template Selector Card -->
+                <div class="card">
+                    <h3 class="mb-4" style="font-size: 1.25rem;">Choose Quotation Style</h3>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary template-btn active" data-template="modern" style="flex: 1;">Modern (Indigo)</button>
+                        <button class="btn btn-secondary template-btn" data-template="classic" style="flex: 1;">Classic (Serif)</button>
+                        <button class="btn btn-secondary template-btn" data-template="bold" style="flex: 1;">Bold Accent (Pink)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Realtime Sticky Quotation Print-Ready Preview -->
+            <div class="invoice-preview-container">
+                <div class="card mb-4" style="padding: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button id="btn-share" class="btn btn-secondary">
+                        <i data-lucide="share-2"></i> Copy Share Link
+                    </button>
+                    <button id="btn-print" class="btn btn-primary">
+                        <i data-lucide="printer"></i> Print / Export Quote
+                    </button>
+                </div>
+
+                <div id="invoice-preview" class="invoice-preview-box template-modern">
+                    <!-- Preview Header -->
+                    <div class="invoice-header">
+                        <div>
+                            <div id="preview-logo-container">
+                                <div class="invoice-logo-placeholder">Upload Logo</div>
+                            </div>
+                            <h2 id="preview-sender-name" style="margin-top: 12px; font-size: 1.4rem;">Kyro Core Technologies</h2>
+                            <p id="preview-sender-address" style="font-size: 0.85rem; color: #475569; white-space: pre-line; margin-top: 4px;">120 Business Ave, Suite 300
+Bangalore, Karnataka
+GSTIN: 29AAAAA1111A1Z1</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <h1 style="font-size: 2.2rem; color: #0f172a; text-transform: uppercase; letter-spacing: 1px;">Quotation</h1>
+                            <p style="font-weight: 700; font-size: 1.1rem; margin-top: 8px;" id="preview-quote-number">QTN-2026-001</p>
+                        </div>
+                    </div>
+
+                    <!-- Parties Grid -->
+                    <div class="invoice-parties">
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 4px;">Estimated For</span>
+                            <strong id="preview-client-name" style="font-size: 1rem; color: #0f172a;">Client Company Name</strong>
+                            <p id="preview-client-address" style="font-size: 0.85rem; color: #475569; white-space: pre-line; margin-top: 4px;">Prospect details</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 2px;">Quote Date</span>
+                                <span id="preview-date-issued" style="font-size: 0.9rem; font-weight: 500;">15 Jun 2026</span>
+                            </div>
+                            <div id="preview-validity-block">
+                                <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 2px;">Valid Until</span>
+                                <span id="preview-date-validity" style="font-size: 0.9rem; font-weight: 500; color: #f59e0b;">15 Jul 2026</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Items Table -->
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+                        <thead>
+                            <tr>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem;">Description</th>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: center;">Qty</th>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Rate</th>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Tax %</th>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="preview-table-body">
+                            <!-- Items populated dynamically -->
+                        </tbody>
+                    </table>
+
+                    <!-- Summary Area -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 24px;">
+                        <div style="max-width: 50%;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 4px;">Terms & Conditions</span>
+                            <p id="preview-terms" style="font-size: 0.8rem; color: #64748b; white-space: pre-line; line-height: 1.4;"></p>
+                        </div>
+                        
+                        <div class="invoice-summary-box">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="preview-subtotal">₹0.00</span>
+                            </div>
+                            <div class="summary-row" id="row-discount" style="display: none;">
+                                <span>Discount:</span>
+                                <span id="preview-discount">-₹0.00</span>
+                            </div>
+                            <div class="summary-row" id="row-cgst">
+                                <span>CGST:</span>
+                                <span id="preview-cgst">₹0.00</span>
+                            </div>
+                            <div class="summary-row" id="row-sgst">
+                                <span>SGST:</span>
+                                <span id="preview-sgst">₹0.00</span>
+                            </div>
+                            <div class="summary-row" id="row-igst" style="display: none;">
+                                <span>IGST:</span>
+                                <span id="preview-igst">₹0.00</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Estimated Total:</span>
+                                <span id="preview-total">₹0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO Landing Details -->
+        <section class="seo-section">
+            <h2 class="seo-title">Online Quotation Generator</h2>
+            <p class="seo-subtitle">Create professional, detailed pricing estimates for clients in seconds. Ideal for B2B contracts, freelancing jobs, corporate bids, and service estimates.</p>
+            
+            <div class="seo-content-grid">
+                <div class="seo-card">
+                    <h3>Accurate Cost Estimation</h3>
+                    <p>Submitting quotations promptly secures contracts. Our interactive quotation builder allows adding clear item scopes, billing counts, service descriptions, and specific terms & conditions.</p>
+                    <p>Perfect for structuring initial estimates before issuing final service invoices.</p>
+                </div>
+                <div class="seo-card">
+                    <h3>Shareable Dynamic Quotes</h3>
+                    <p>Need client approvals quickly? Compile your quotation details, customize the look, and hit "Copy Share Link". Your parameters are packed securely into a localized URL hash, allowing you to copy and send the state directly to anyone to view online!</p>
+                </div>
+            </div>
+
+            <!-- FAQs Accordion -->
+            <div class="faq-accordion">
+                <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What is the difference between an Invoice and a Quotation?</div>
+                    <div class="faq-answer">A quotation is an initial proposed price estimate sent to clients for project negotiation and approval. An invoice is issued after the services have been rendered or contract completed, demanding payment.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How does the "Copy Share Link" feature work?</div>
+                    <div class="faq-answer">When you click "Copy Share Link", all your filled inputs (client name, items, pricing structure, logo excluded for length) are serialized into a safe web link. When a client opens that link, the quotation builder renders your quotation precisely as designed.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is my information private?</div>
+                    <div class="faq-answer">Absolutely. Like all Kyro tools, all processing, inputs, and PDF generations occur directly in your local browser sandbox. No server writes are performed.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Kyro Business Tools. All rights reserved. Designed and developed by Kyro Core Technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Theme Manager -->
+    <script src="assets/js/theme.js"></script>
+    <!-- Quotation Handler -->
+    <script src="assets/js/quotation.js"></script>
+</body>
+</html>

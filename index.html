@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyro Business Tools - Premium Free Productivity Suite</title>
+    
+    <script>
+        // Prevent theme flash of light unstyled content (FOUC)
+        (function() {
+            const theme = localStorage.getItem('kyro-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Access free online business productivity tools including an invoice generator, quotation builder, GST calculator, EMI loan estimator, and local PDF merger. Fast, safe, and secure.">
+    <meta name="keywords" content="invoice generator, quotation builder, gst calculator, emi calculator, pdf merger, business tools, Kyro, freelancer tools">
+    <meta name="author" content="Kyro Core Technologies">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Kyro Business Tools - Free Productivity Suite">
+    <meta property="og:description" content="A comprehensive suite of free business tools: Invoices, Quotations, GST, EMI, and secure client-side PDF utilities. Powered by Kyro Core Technologies.">
+    <meta property="og:image" content="assets/images/og-dashboard.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Kyro Business Tools",
+      "url": "https://tools.kyro.com",
+      "description": "Premium suite of free business productivity tools owned by Kyro Core Technologies.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Kyro Core Technologies",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://tools.kyro.com/assets/images/logo.png"
+        }
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Background glow shapes -->
+    <div style="position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0) 70%); top: -100px; left: -100px; pointer-events: none; z-index: -1;"></div>
+    <div style="position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(236,72,153,0.1) 0%, rgba(236,72,153,0) 70%); top: 40%; right: -200px; pointer-events: none; z-index: -1;"></div>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link active">Dashboard</a>
+                <a href="invoice-generator.html" class="nav-link">Invoice</a>
+                <a href="quotation-generator.html" class="nav-link">Quotation</a>
+                <a href="gst-calculator.html" class="nav-link">GST</a>
+                <a href="emi-calculator.html" class="nav-link">EMI</a>
+                <a href="pdf-merger.html" class="nav-link">PDF Suite</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i data-lucide="moon"></i>
+                </button>
+                <a href="invoice-generator.html" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">
+                    Quick Invoice
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Hero Title Section -->
+        <section class="hero-section">
+            <h1>All-In-One Business Toolbox</h1>
+            <p>Empower your daily operations with professional, secure, and lightning-fast tools. Create documents, perform calculations, and manage PDFs entirely in your browser.</p>
+        </section>
+
+        <!-- Active Core Tools Grid -->
+        <section class="mb-4">
+            <div class="section-header">
+                <h2>Our Premium Workspace</h2>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">Select a utility to begin</span>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- Invoice Generator Card -->
+                <div class="card card-hover tool-card">
+                    <div>
+                        <div class="tool-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <h3 class="tool-title">Invoice Generator</h3>
+                        <p class="tool-desc">Design professional business invoices with customizable tax variables, automatic calculations, multiple style templates, logo uploads, and seamless PDF export/print.</p>
+                    </div>
+                    <div>
+                        <div class="tool-stats">
+                            <span>Usage Counter:</span>
+                            <span><span id="stat-invoice">0</span> created</span>
+                        </div>
+                        <div class="tool-action">
+                            <a href="invoice-generator.html" class="btn btn-primary" style="width: 100%;">Launch Invoice Builder</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quotation Generator Card -->
+                <div class="card card-hover tool-card">
+                    <div>
+                        <div class="tool-icon">
+                            <i data-lucide="scroll"></i>
+                        </div>
+                        <h3 class="tool-title">Quotation Generator</h3>
+                        <p class="tool-desc">Quickly generate formal B2B client price estimates and quotes. Add item summaries, validity periods, custom logo, tax rates, terms, and download vectors.</p>
+                    </div>
+                    <div>
+                        <div class="tool-stats">
+                            <span>Usage Counter:</span>
+                            <span><span id="stat-quotation">0</span> created</span>
+                        </div>
+                        <div class="tool-action">
+                            <a href="quotation-generator.html" class="btn btn-primary" style="width: 100%;">Launch Quote Builder</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GST Calculator Card -->
+                <div class="card card-hover tool-card">
+                    <div>
+                        <div class="tool-icon">
+                            <i data-lucide="receipt"></i>
+                        </div>
+                        <h3 class="tool-title">GST Calculator</h3>
+                        <p class="tool-desc">Compute GST inclusive/exclusive rates instantly. Supports unified Indian brackets (3%, 5%, 12%, 18%, 28%) and splits into CGST, SGST, and IGST portions.</p>
+                    </div>
+                    <div>
+                        <div class="tool-stats">
+                            <span>Usage Counter:</span>
+                            <span><span id="stat-gst">0</span> calculations</span>
+                        </div>
+                        <div class="tool-action">
+                            <a href="gst-calculator.html" class="btn btn-primary" style="width: 100%;">Calculate GST</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMI Calculator Card -->
+                <div class="card card-hover tool-card">
+                    <div>
+                        <div class="tool-icon">
+                            <i data-lucide="landmark"></i>
+                        </div>
+                        <h3 class="tool-title">EMI Calculator</h3>
+                        <p class="tool-desc">Evaluate loan amounts, rates, and tenure. Renders visual amortization schedule graphs (Principal vs Interest breakdown) with fully downloadable tables.</p>
+                    </div>
+                    <div>
+                        <div class="tool-stats">
+                            <span>Usage Counter:</span>
+                            <span><span id="stat-emi">0</span> calculated</span>
+                        </div>
+                        <div class="tool-action">
+                            <a href="emi-calculator.html" class="btn btn-primary" style="width: 100%;">Calculate EMI</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PDF Suite Card -->
+                <div class="card card-hover tool-card">
+                    <div>
+                        <div class="tool-icon">
+                            <i data-lucide="files"></i>
+                        </div>
+                        <h3 class="tool-title">PDF Merger & Tools</h3>
+                        <p class="tool-desc">Merge multiple PDF pages, split ranges, extract, reorder, convert images to PDF, render PDF to JPEG/PNG, or compress. Process files 100% locally and securely.</p>
+                    </div>
+                    <div>
+                        <div class="tool-stats">
+                            <span>Usage Counter:</span>
+                            <span><span id="stat-pdf">0</span> actions</span>
+                        </div>
+                        <div class="tool-action">
+                            <a href="pdf-merger.html" class="btn btn-primary" style="width: 100%;">Open PDF Suite</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Future Ready Workspace Section -->
+        <section class="mt-4">
+            <div class="section-header">
+                <h2>Future Ready Integration</h2>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">Kyro Core roadmap modules</span>
+            </div>
+            
+            <div class="future-grid">
+                <div class="future-card">
+                    <span class="icon">📝</span>
+                    <h4>Resume Builder</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">📱</span>
+                    <h4>QR Generator</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">🏷️</span>
+                    <h4>Barcode Maker</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">💱</span>
+                    <h4>Currency Convert</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">📈</span>
+                    <h4>Margin Calculator</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">🏛️</span>
+                    <h4>Tax Estimator</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">💡</span>
+                    <h4>Brand Namer</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">✍️</span>
+                    <h4>Contract Builder</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">💳</span>
+                    <h4>Salary Calc</h4>
+                    <p>Coming Soon</p>
+                </div>
+                <div class="future-card">
+                    <span class="icon">🎒</span>
+                    <h4>Freelancer Kit</h4>
+                    <p>Coming Soon</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">Kyro <span>Tools</span></div>
+                    <p>Premium online toolkit providing secure, fast, and feature-rich business tools. Proudly owned by Kyro Core Technologies.</p>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Utilities</h4>
+                    <ul class="footer-links">
+                        <li><a href="invoice-generator.html">Invoice Generator</a></li>
+                        <li><a href="quotation-generator.html">Quotation Builder</a></li>
+                        <li><a href="gst-calculator.html">GST Calculator India</a></li>
+                        <li><a href="emi-calculator.html">EMI Loan Calculator</a></li>
+                        <li><a href="pdf-merger.html">PDF Suite & Merger</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Legals</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Secure Processing</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Kyro Business Tools. All rights reserved. Designed and developed by Kyro Core Technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Theme & Stats Handler -->
+    <script src="assets/js/theme.js"></script>
+</body>
+</html>

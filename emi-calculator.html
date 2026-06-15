@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Loan Calculator - Check Repayments & Amortization | Kyro</title>
+    
+    <script>
+        // Prevent theme flash of light unstyled content (FOUC)
+        (function() {
+            const theme = localStorage.getItem('kyro-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Calculate your monthly loan EMI payments online for free. Features sliders for loan amounts, interest rates, tenure, amortization tables, and CSV exports.">
+    <meta name="keywords" content="emi calculator, loan calculator online, home loan emi calculator, car loan calculator, amortization schedule tool">
+    <meta name="author" content="Kyro Core Technologies">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Kyro Loan EMI Calculator",
+      "operatingSystem": "All",
+      "applicationCategory": "BusinessApplication",
+      "description": "Calculate loan EMI payments, principal vs interest splits, and export full amortization tables to CSV.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="invoice-generator.html" class="nav-link">Invoice</a>
+                <a href="quotation-generator.html" class="nav-link">Quotation</a>
+                <a href="gst-calculator.html" class="nav-link">GST</a>
+                <a href="emi-calculator.html" class="nav-link active">EMI</a>
+                <a href="pdf-merger.html" class="nav-link">PDF Suite</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i data-lucide="moon"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
+                    Back Hub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="container">
+        <!-- Main title -->
+        <div class="hero-section" style="margin-bottom: 40px;">
+            <h1 style="font-size: 2.5rem;">EMI Loan Calculator</h1>
+            <p>Model financial loans, check monthly commitments, interest burdens, and download full amortization statements.</p>
+        </div>
+
+        <div class="tool-layout">
+            <!-- Left Side: Interactive Sliders -->
+            <div class="tool-workspace">
+                <div class="card">
+                    <!-- Loan Principal Slider -->
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label for="emi-principal-input">Loan Amount</label>
+                            <span class="slider-val" id="lbl-principal">₹10,00,000</span>
+                        </div>
+                        <input type="range" id="emi-principal-range" min="50000" max="10000000" step="50000" value="1000000">
+                        <div class="input-addon-group mt-4">
+                            <span class="input-addon">₹</span>
+                            <input type="number" id="emi-principal-input" value="1000000" min="50000" max="10000000" step="50000">
+                        </div>
+                    </div>
+
+                    <!-- Interest Rate Slider -->
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label for="emi-interest-input">Interest Rate (P.A.)</label>
+                            <span class="slider-val" id="lbl-interest">8.5%</span>
+                        </div>
+                        <input type="range" id="emi-interest-range" min="1" max="25" step="0.1" value="8.5">
+                        <div class="input-addon-group mt-4">
+                            <input type="number" id="emi-interest-input" value="8.5" min="1" max="25" step="0.1">
+                            <span class="input-addon" style="border-left: 0; border-radius: 0 var(--radius-md) var(--radius-md) 0;">%</span>
+                        </div>
+                    </div>
+
+                    <!-- Loan Tenure Slider -->
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label for="emi-tenure-input">Loan Tenure</label>
+                            <span class="slider-val" id="lbl-tenure">5 Years</span>
+                        </div>
+                        <input type="range" id="emi-tenure-range" min="1" max="30" step="1" value="5">
+                        <div style="display: flex; gap: 12px;" class="mt-4">
+                            <input type="number" id="emi-tenure-input" value="5" min="1" max="360" step="1" style="flex: 2;">
+                            <select id="emi-tenure-type" style="flex: 1;">
+                                <option value="years">Years</option>
+                                <option value="months">Months</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Realtime Results & Amortization charts -->
+            <div>
+                <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <h2 class="mb-4" style="font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="line-chart" style="color: var(--primary);"></i> Repayment Summary
+                        </h2>
+                        
+                        <!-- EMI Summary Badges -->
+                        <div class="emi-summary-grid">
+                            <div class="emi-summary-card">
+                                <div class="emi-summary-label">Monthly EMI</div>
+                                <div class="emi-summary-val" id="val-emi">₹0.00</div>
+                            </div>
+                            <div class="emi-summary-card">
+                                <div class="emi-summary-label">Total Interest</div>
+                                <div class="emi-summary-val" id="val-total-interest" style="color: var(--secondary);">₹0.00</div>
+                            </div>
+                            <div class="emi-summary-card">
+                                <div class="emi-summary-label">Total Payment</div>
+                                <div class="emi-summary-val" id="val-total-repayment">₹0.00</div>
+                            </div>
+                        </div>
+
+                        <!-- Donut Chart Wrapper -->
+                        <div class="emi-chart-wrapper">
+                            <canvas id="emi-donut-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amortization Schedule Table -->
+        <section class="card mt-4" style="padding: 24px;">
+            <div class="section-header" style="flex-wrap: wrap; gap: 16px;">
+                <h3 style="font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="calendar" style="color: var(--warning);"></i> Amortization Schedule
+                </h3>
+                
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <div style="display: flex; background: var(--bg-tertiary); border-radius: var(--radius-md); padding: 4px;">
+                        <button id="sched-yearly" class="btn" style="padding: 6px 12px; font-size: 0.8rem; border-radius: var(--radius-sm); background: var(--bg-secondary);">Yearly</button>
+                        <button id="sched-monthly" class="btn" style="padding: 6px 12px; font-size: 0.8rem; border-radius: var(--radius-sm); background: none; color: var(--text-secondary);">Monthly</button>
+                    </div>
+                    <button id="btn-export-csv" class="btn btn-secondary" style="padding: 8px 14px; font-size: 0.8rem;">
+                        <i data-lucide="download" style="width: 14px; height: 14px;"></i> Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th id="th-period">Year</th>
+                            <th>Principal Paid</th>
+                            <th>Interest Paid</th>
+                            <th>Total Annual Payment</th>
+                            <th>Remaining Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="amortization-table-body">
+                        <!-- Table rows populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEO Landing Details -->
+        <section class="seo-section">
+            <h2 class="seo-title">Free Loan EMI Calculator Online</h2>
+            <p class="seo-subtitle">Compute loan EMIs, interest details, and view payment tables. Ideal for budgeting mortgages, personal financial planning, student loans, or business finance modeling.</p>
+            
+            <div class="seo-content-grid">
+                <div class="seo-card">
+                    <h3>What is an EMI?</h3>
+                    <p>An **EMI** (Equated Monthly Installment) is a fixed payment amount made by a borrower to a lender at a specified date each calendar month. EMIs consist of both a principal portion (which pays down the loan amount) and an interest portion (repaying the cost of borrowing).</p>
+                    <p>In the initial months of the loan tenure, interest accounts for the majority of the EMI payment. As time progresses, the principal repayment component grows, decreasing the debt balance faster.</p>
+                </div>
+                <div class="seo-card">
+                    <h3>Factors Influencing Your EMI</h3>
+                    <p>EMIs are governed by three primary variables:</p>
+                    <ul>
+                        <li><strong>Principal</strong>: The raw capital quantity borrowed. Higher principals yield larger monthly EMIs.</li>
+                        <li><strong>Interest Rate</strong>: The loan interest percentage charged by the lending bank. Even minor interest increments accumulate into huge repayments.</li>
+                        <li><strong>Tenure</strong>: The loan payback duration. Extending tenure reduces monthly EMIs but increases total lifetime interest payable.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FAQs Accordion -->
+            <div class="faq-accordion">
+                <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What formula is used to calculate EMI?</div>
+                    <div class="faq-answer">The mathematical formula is: <em>EMI = [P x R x (1+R)^N] / [(1+R)^N - 1]</em>, where <strong>P</strong> represents Principal, <strong>R</strong> is the monthly interest rate (Annual rate divided by 12 divided by 100), and <strong>N</strong> is the total number of repayment months.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Why does the schedule show different principal-interest splits over time?</div>
+                    <div class="faq-answer">Interest is calculated on the remaining loan principal. As you pay off the principal month after month, the remaining balance decreases. Consequently, the interest portion of the next month's payment drops, allowing more of the EMI to go toward principal reduction.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Can I download the amortization report?</div>
+                    <div class="faq-answer">Yes. Hit the "Export CSV" button to download a spreadsheet-compatible text file containing the comprehensive principal and interest split table.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Kyro Business Tools. All rights reserved. Designed and developed by Kyro Core Technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Theme Manager -->
+    <script src="assets/js/theme.js"></script>
+    <!-- EMI Handler -->
+    <script src="assets/js/emi.js"></script>
+</body>
+</html>

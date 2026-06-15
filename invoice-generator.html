@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Invoice Generator - Create & Download PDFs | Kyro</title>
+    
+    <script>
+        // Prevent theme flash of light unstyled content (FOUC)
+        (function() {
+            const theme = localStorage.getItem('kyro-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Use our free online invoice generator to create professional, branded invoices with GST calculations, custom templates, and logo uploads. Export to PDF instantly.">
+    <meta name="keywords" content="free invoice generator, create invoice online, gst invoice maker, billing tool, invoice templates, download pdf invoice">
+    <meta name="author" content="Kyro Core Technologies">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/print.css" media="print">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Kyro Free Invoice Generator",
+      "operatingSystem": "All",
+      "applicationCategory": "BusinessApplication",
+      "description": "Create, print, and download professional invoices client-side. Supports custom templates, GST calculations, multi-currency and branding uploads.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="invoice-generator.html" class="nav-link active">Invoice</a>
+                <a href="quotation-generator.html" class="nav-link">Quotation</a>
+                <a href="gst-calculator.html" class="nav-link">GST</a>
+                <a href="emi-calculator.html" class="nav-link">EMI</a>
+                <a href="pdf-merger.html" class="nav-link">PDF Suite</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i data-lucide="moon"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
+                    Back Hub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="container">
+        <div class="tool-layout">
+            <!-- Left Side: Interactive Invoice Builder Form -->
+            <div class="tool-workspace">
+                <div class="card">
+                    <h2 class="mb-4" style="font-size: 1.5rem; display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="pen-tool" style="color: var(--primary);"></i> Invoice Details
+                    </h2>
+                    
+                    <!-- Branding & Logo -->
+                    <div class="form-group">
+                        <label>Company Branding (Upload Logo)</label>
+                        <div class="upload-zone" id="logo-dropzone">
+                            <i data-lucide="image"></i>
+                            <p>Drag your company logo here or <strong>browse files</strong></p>
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Recommended: PNG or JPG, Square format</span>
+                            <input type="file" id="logo-input" class="file-input" accept="image/*">
+                        </div>
+                        <div id="logo-preview-badge" style="display: none; align-items: center; justify-content: space-between; background: var(--bg-tertiary); padding: 8px 12px; margin-top: 8px; border-radius: var(--radius-sm);">
+                            <span style="font-size: 0.85rem; font-weight: 600;">Logo Uploaded</span>
+                            <button id="remove-logo-btn" class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75rem;">Delete</button>
+                        </div>
+                    </div>
+
+                    <!-- Meta details -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inv-number">Invoice Number</label>
+                            <input type="text" id="inv-number" value="INV-2026-001">
+                        </div>
+                        <div class="form-group">
+                            <label for="inv-currency">Currency</label>
+                            <select id="inv-currency">
+                                <option value="INR">INR (₹)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="AUD">AUD ($)</option>
+                                <option value="CAD">CAD ($)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inv-date">Invoice Date</label>
+                            <input type="date" id="inv-date">
+                        </div>
+                        <div class="form-group">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <label for="inv-due" style="margin-bottom: 0;">Due Date</label>
+                                <label style="margin-bottom: 0; display: inline-flex; align-items: center; font-size: 0.8rem; font-weight: normal; cursor: pointer; color: var(--primary);">
+                                    <input type="checkbox" id="toggle-due-date" checked style="margin-right: 4px; width: auto; cursor: pointer;"> Include
+                                </label>
+                            </div>
+                            <input type="date" id="inv-due">
+                        </div>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
+
+                    <!-- Parties Involved -->
+                    <h3 class="mb-4" style="font-size: 1.2rem;">Parties Info</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Sender Details (From)</label>
+                            <input type="text" id="sender-name" placeholder="Company / Sender Name" value="Kyro Core Technologies">
+                            <textarea id="sender-address" rows="3" placeholder="Billing Address, GSTIN" class="mt-4">120 Business Ave, Suite 300&#10;Bangalore, Karnataka&#10;GSTIN: 29AAAAA1111A1Z1</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Client Details (To)</label>
+                            <input type="text" id="client-name" placeholder="Client Name / Business">
+                            <textarea id="client-address" rows="3" placeholder="Client Billing Address" class="mt-4"></textarea>
+                        </div>
+                    </div>
+
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
+
+                    <!-- Line Items -->
+                    <div class="section-header">
+                        <h3 style="font-size: 1.2rem;">Line Items</h3>
+                        <button id="add-item-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
+                            <i data-lucide="plus" style="width: 14px; height: 14px;"></i> Add Item
+                        </button>
+                    </div>
+
+                    <div id="item-list-container">
+                        <div class="item-list-header">
+                            <div>Description</div>
+                            <div>Qty</div>
+                            <div>Rate</div>
+                            <div>Tax (GST %)</div>
+                            <div></div>
+                        </div>
+                        
+                        <!-- Dynamic rows injected here -->
+                    </div>
+
+                    <!-- Discount & Shipping -->
+                    <div class="form-row mt-4">
+                        <div class="form-group">
+                            <label for="discount-val">Discount (%)</label>
+                            <input type="number" id="discount-val" value="0" min="0" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="tax-type">GST Split Type</label>
+                            <select id="tax-type">
+                                <option value="cgst-sgst">Intra-state (CGST + SGST)</option>
+                                <option value="igst">Inter-state (IGST)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-group">
+                        <label for="inv-notes">Payment Terms / Terms & Conditions</label>
+                        <textarea id="inv-notes" rows="3" placeholder="Enter bank details, payment timelines, etc.">Payment is due within 15 days of invoice date.&#10;Bank: Kyro Federal Bank&#10;Account: 1234567890&#10;IFSC: KYRO0001234</textarea>
+                    </div>
+                </div>
+
+                <!-- Template Selector Card -->
+                <div class="card">
+                    <h3 class="mb-4" style="font-size: 1.25rem;">Choose Invoice Template</h3>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-secondary template-btn active" data-template="modern" style="flex: 1;">Modern (Indigo)</button>
+                        <button class="btn btn-secondary template-btn" data-template="classic" style="flex: 1;">Classic (Serif)</button>
+                        <button class="btn btn-secondary template-btn" data-template="bold" style="flex: 1;">Bold Accent (Pink)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Realtime Sticky Print-Ready Invoice Preview -->
+            <div class="invoice-preview-container">
+                <div class="card mb-4" style="padding: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button id="btn-email" class="btn btn-secondary">
+                        <i data-lucide="mail"></i> Email Invoice
+                    </button>
+                    <button id="btn-print" class="btn btn-primary">
+                        <i data-lucide="printer"></i> Print / Download PDF
+                    </button>
+                </div>
+
+                <div id="invoice-preview" class="invoice-preview-box template-modern">
+                    <!-- Preview Header -->
+                    <div class="invoice-header">
+                        <div>
+                            <div id="preview-logo-container">
+                                <div class="invoice-logo-placeholder">Upload Logo</div>
+                            </div>
+                            <h2 id="preview-sender-name" style="margin-top: 12px; font-size: 1.4rem;">Kyro Core Technologies</h2>
+                            <p id="preview-sender-address" style="font-size: 0.85rem; color: #475569; white-space: pre-line; margin-top: 4px;">120 Business Ave, Suite 300
+Bangalore, Karnataka
+GSTIN: 29AAAAA1111A1Z1</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <h1 style="font-size: 2.2rem; color: #0f172a; text-transform: uppercase; letter-spacing: 1px;">Invoice</h1>
+                            <p style="font-weight: 700; font-size: 1.1rem; margin-top: 8px;" id="preview-inv-number">INV-2026-001</p>
+                        </div>
+                    </div>
+
+                    <!-- Parties Grid -->
+                    <div class="invoice-parties">
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 4px;">Billed To</span>
+                            <strong id="preview-client-name" style="font-size: 1rem; color: #0f172a;">Client Company Name</strong>
+                            <p id="preview-client-address" style="font-size: 0.85rem; color: #475569; white-space: pre-line; margin-top: 4px;">Address lines</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 2px;">Date Issued</span>
+                                <span id="preview-date-issued" style="font-size: 0.9rem; font-weight: 500;">15 Jun 2026</span>
+                            </div>
+                            <div id="preview-due-block">
+                                <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 2px;">Payment Due</span>
+                                <span id="preview-date-due" style="font-size: 0.9rem; font-weight: 500; color: #ef4444;">30 Jun 2026</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Items Table -->
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+                        <thead>
+                            <tr>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem;">Description</th>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: center;">Qty</th>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Rate</th>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Tax %</th>
+                                <th style="background-color: #f8fafc; color: #334155; font-weight: 700; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; text-align: right;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="preview-table-body">
+                            <!-- Items populated dynamically -->
+                        </tbody>
+                    </table>
+
+                    <!-- Summary Area -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 24px;">
+                        <div style="max-width: 50%;">
+                            <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #64748b; display: block; margin-bottom: 4px;">Terms & Notes</span>
+                            <p id="preview-notes" style="font-size: 0.8rem; color: #64748b; white-space: pre-line; line-height: 1.4;"></p>
+                        </div>
+                        
+                        <div class="invoice-summary-box">
+                            <div class="summary-row">
+                                <span>Subtotal:</span>
+                                <span id="preview-subtotal">₹0.00</span>
+                            </div>
+                            <div class="summary-row" id="row-discount" style="display: none;">
+                                <span>Discount:</span>
+                                <span id="preview-discount">-₹0.00</span>
+                            </div>
+                            <div class="summary-row" id="row-cgst">
+                                <span>CGST:</span>
+                                <span id="preview-cgst">₹0.00</span>
+                            </div>
+                            <div class="summary-row" id="row-sgst">
+                                <span>SGST:</span>
+                                <span id="preview-sgst">₹0.00</span>
+                            </div>
+                            <div class="summary-row" id="row-igst" style="display: none;">
+                                <span>IGST:</span>
+                                <span id="preview-igst">₹0.00</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total Amount:</span>
+                                <span id="preview-total">₹0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO Landing Details -->
+        <section class="seo-section">
+            <h2 class="seo-title">Free Invoice Generator Tool</h2>
+            <p class="seo-subtitle">Create print-ready invoice forms and bills quickly. Ideal for freelancers, contractors, sole traders, small business agencies, and startups in India and globally.</p>
+            
+            <div class="seo-content-grid">
+                <div class="seo-card">
+                    <h3>Professional Standard Billing</h3>
+                    <p>Building client trust starts with clear transactions. Our free billing tool renders beautifully structures invoices containing clear payment breakdowns, due alerts, tax columns, and custom banking parameters.</p>
+                    <p>Switch between modern grid styles (Serif, Minimal, Bold Accent) instantly matching your logo color palettes.</p>
+                </div>
+                <div class="seo-card">
+                    <h3>Flexible GST Compliance</h3>
+                    <p>Designed fully for Indian tax rates. Split invoices using SGST and CGST rules for intra-state trading, or select IGST for inter-state deliveries. Custom GST columns allow adjusting percentages per individual line items.</p>
+                    <p>Calculates exact figures instantly to minimize manual invoice arithmetic mistakes.</p>
+                </div>
+            </div>
+
+            <!-- FAQs Accordion -->
+            <div class="faq-accordion">
+                <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Are these invoices secure to make?</div>
+                    <div class="faq-answer">Yes, entirely! All invoice parsing, details, line values, and company branding logos are processed locally in your web browser. Nothing is uploaded to any servers, guaranteeing absolute client information privacy.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">How can I download the final document?</div>
+                    <div class="faq-answer">Once your details are filled, simply hit the "Print / Download PDF" button. In the system print dialog, select "Save as PDF" to render and save a crisp, vector-standard invoice file on your computer.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Can I use different currencies?</div>
+                    <div class="faq-answer">Yes, we support standard Global currencies including INR, USD, EUR, GBP, AUD, and CAD. Simply update the dropdown selection in the builder parameters.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Email Modal Overlay -->
+    <div class="modal-overlay" id="email-modal">
+        <div class="modal-box">
+            <h3 class="modal-title"><i data-lucide="send" style="color: var(--primary);"></i> Email Invoice</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">Send a copy of this invoice to your client. This is a simulated local SMTP dispatch interface.</p>
+            
+            <form id="email-form">
+                <div class="form-group">
+                    <label for="email-to">Client Email Address</label>
+                    <input type="email" id="email-to" placeholder="client@company.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="email-subject">Subject Line</label>
+                    <input type="text" id="email-subject" value="Invoice from Kyro Core Technologies" required>
+                </div>
+                <div class="form-group">
+                    <label for="email-body">Email Body Message</label>
+                    <textarea id="email-body" rows="4" required>Hi,&#10;&#10;Please find attached our invoice for the services delivered. Let us know if you have any questions.&#10;&#10;Best regards,&#10;Kyro Core Technologies</textarea>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                    <button type="button" class="btn btn-secondary" id="email-cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="email-submit-btn">
+                        <span>Send Email</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Kyro Business Tools. All rights reserved. Designed and developed by Kyro Core Technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Theme Manager -->
+    <script src="assets/js/theme.js"></script>
+    <!-- Invoice Handler -->
+    <script src="assets/js/invoice.js"></script>
+</body>
+</html>

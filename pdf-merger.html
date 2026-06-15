@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free PDF Merger Tool - Combine & Edit PDFs Online | Kyro</title>
+    
+    <script>
+        // Prevent theme flash of light unstyled content (FOUC)
+        (function() {
+            const theme = localStorage.getItem('kyro-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Merge, split, reorder, compress, and convert PDF documents entirely in your browser. Secure local file processing with no server uploads. Fast and free.">
+    <meta name="keywords" content="pdf merger, combine pdf online, split pdf free, compress pdf local, pdf to image, image to pdf converter">
+    <meta name="author" content="Kyro Core Technologies">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Kyro Free PDF Suite",
+      "operatingSystem": "All",
+      "applicationCategory": "UtilitiesApplication",
+      "description": "Secure client-side PDF manipulation tools including PDF Merger, Splitter, Compressor, Page Reorder, Image to PDF and PDF to Image.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="invoice-generator.html" class="nav-link">Invoice</a>
+                <a href="quotation-generator.html" class="nav-link">Quotation</a>
+                <a href="gst-calculator.html" class="nav-link">GST</a>
+                <a href="emi-calculator.html" class="nav-link">EMI</a>
+                <a href="pdf-merger.html" class="nav-link active">PDF Suite</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <i data-lucide="moon"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
+                    Back Hub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="container">
+        <!-- Main title -->
+        <div class="hero-section" style="margin-bottom: 32px;">
+            <h1 style="font-size: 2.5rem;">Secure PDF Workspace</h1>
+            <p>Modify, merge, extract, and convert PDF papers right in your browser memory. Files never leave your computer, ensuring total confidentiality.</p>
+            
+            <div class="mt-4" style="display: inline-flex; align-items: center; gap: 8px; background-color: var(--success-light); color: var(--success); padding: 8px 16px; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(16, 185, 129, 0.2);">
+                <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+                LOCAL PROCESSING ACTIVE: No data is uploaded to server networks.
+            </div>
+        </div>
+
+        <div class="tool-layout wide">
+            <div class="card">
+                <!-- PDF Suite Tabs Navigation -->
+                <div class="pdf-tabs">
+                    <button class="pdf-tab-btn active" data-tab="merge">📄 Merge PDFs</button>
+                    <button class="pdf-tab-btn" data-tab="split">✂️ Split PDF</button>
+                    <button class="pdf-tab-btn" data-tab="reorder">📑 Page Reorder</button>
+                    <button class="pdf-tab-btn" data-tab="img-to-pdf">🖼️ Image to PDF</button>
+                    <button class="pdf-tab-btn" data-tab="pdf-to-img">📄 PDF to Image</button>
+                    <button class="pdf-tab-btn" data-tab="compress">🗜️ Compress PDF</button>
+                </div>
+
+                <!-- Tab content blocks -->
+                <!-- 1. MERGE TABS -->
+                <div class="pdf-tab-content active" id="tab-merge">
+                    <h3 class="mb-4" style="font-size: 1.25rem;">Combine Multiple PDFs</h3>
+                    <div class="upload-zone" id="merge-dropzone">
+                        <i data-lucide="upload-cloud"></i>
+                        <p>Drag multiple PDF files here or <strong>browse files</strong></p>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Selected documents will list below in compilation order</span>
+                        <input type="file" id="merge-input" class="file-input" accept="application/pdf" multiple>
+                    </div>
+
+                    <div id="merge-file-list" class="pdf-file-list">
+                        <!-- Uploaded files listed dynamically -->
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 24px; gap: 12px;">
+                        <button id="btn-clear-merge" class="btn btn-secondary" style="display: none;">Clear All</button>
+                        <button id="btn-process-merge" class="btn btn-primary" disabled>
+                            <span>Merge Documents</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. SPLIT TABS -->
+                <div class="pdf-tab-content" id="tab-split" style="display: none;">
+                    <h3 class="mb-4" style="font-size: 1.25rem;">Split PDF Pages</h3>
+                    
+                    <div class="upload-zone" id="split-dropzone">
+                        <i data-lucide="file-down"></i>
+                        <p>Upload a single PDF document to split</p>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);" id="split-file-name-label">Browse files</span>
+                        <input type="file" id="split-input" class="file-input" accept="application/pdf">
+                    </div>
+
+                    <div class="form-row mt-4" style="max-width: 500px; display: none;" id="split-controls">
+                        <div class="form-group">
+                            <label for="split-ranges">Page Ranges to Extract</label>
+                            <input type="text" id="split-ranges" placeholder="e.g. 1-3, 5, 8-10" value="1">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 4px;">Use commas to separate pages or ranges.</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 24px; gap: 12px;">
+                        <button id="btn-process-split" class="btn btn-primary" disabled>
+                            <span>Extract Pages</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. PAGE REORDER TABS -->
+                <div class="pdf-tab-content" id="tab-reorder" style="display: none;">
+                    <h3 class="mb-4" style="font-size: 1.25rem;">Rearrange and Edit Pages</h3>
+                    <div class="upload-zone" id="reorder-dropzone">
+                        <i data-lucide="layers"></i>
+                        <p>Upload a PDF document to reorder pages</p>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);" id="reorder-file-name-label">Browse files</span>
+                        <input type="file" id="reorder-input" class="file-input" accept="application/pdf">
+                    </div>
+
+                    <div id="reorder-grid-container" style="display: none;" class="mt-4">
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">Drag and drop pages to rearrange their order, or click the deletion crosses to exclude pages.</p>
+                        <div id="pdf-thumbnails" class="pdf-thumbnail-grid">
+                            <!-- Visual PDF pages canvases will populate here -->
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+                        <button id="btn-process-reorder" class="btn btn-primary" disabled>
+                            <span>Save New PDF Layout</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. IMAGE TO PDF TABS -->
+                <div class="pdf-tab-content" id="tab-img-to-pdf" style="display: none;">
+                    <h3 class="mb-4" style="font-size: 1.25rem;">Convert Images to PDF</h3>
+                    <div class="upload-zone" id="img-dropzone">
+                        <i data-lucide="image"></i>
+                        <p>Drag images (PNG, JPG, JPEG) here or <strong>browse files</strong></p>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Images will compile into PDF pages in list order</span>
+                        <input type="file" id="img-input" class="file-input" accept="image/png, image/jpeg, image/jpg" multiple>
+                    </div>
+
+                    <div id="img-file-list" class="pdf-file-list">
+                        <!-- Loaded images list -->
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 24px; gap: 12px;">
+                        <button id="btn-clear-img" class="btn btn-secondary" style="display: none;">Clear All</button>
+                        <button id="btn-process-img" class="btn btn-primary" disabled>
+                            <span>Convert to PDF</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. PDF TO IMAGE TABS -->
+                <div class="pdf-tab-content" id="tab-pdf-to-img" style="display: none;">
+                    <h3 class="mb-4" style="font-size: 1.25rem;">Convert PDF Pages to PNG Images</h3>
+                    <div class="upload-zone" id="pdf-to-img-dropzone">
+                        <i data-lucide="images"></i>
+                        <p>Upload a PDF to render pages as PNGs</p>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);" id="pdf-to-img-name-label">Browse files</span>
+                        <input type="file" id="pdf-to-img-input" class="file-input" accept="application/pdf">
+                    </div>
+
+                    <div id="pdf-to-img-results" style="display: none;" class="mt-4">
+                        <div class="section-header">
+                            <h4>Rendered Canvas Sheets</h4>
+                            <button id="btn-download-all-images" class="btn btn-success" style="padding: 6px 12px; font-size: 0.8rem;">Download All Pages</button>
+                        </div>
+                        <div id="pdf-render-canvases-container" class="pdf-thumbnail-grid mt-4">
+                            <!-- Canvases displaying pages rendering -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. COMPRESS PDF TABS -->
+                <div class="pdf-tab-content" id="tab-compress" style="display: none;">
+                    <h3 class="mb-4" style="font-size: 1.25rem;">Compress PDF File Size</h3>
+                    <div class="upload-zone" id="compress-dropzone">
+                        <i data-lucide="file-minus"></i>
+                        <p>Upload a PDF document to optimize file size</p>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);" id="compress-file-name-label">Browse files</span>
+                        <input type="file" id="compress-input" class="file-input" accept="application/pdf">
+                    </div>
+
+                    <div id="compress-result-box" style="display: none; background: var(--success-light); border: 1px solid var(--success); padding: 16px; border-radius: var(--radius-md);" class="mt-4">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 0.85rem; font-weight: 600; display: block; color: var(--text-primary);">Compression Complete!</span>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);" id="compress-stats-label">Original: 2.1MB | Compressed: 1.4MB (Reduced by 33%)</span>
+                            </div>
+                            <button id="btn-download-compressed" class="btn btn-success">Download PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO Landing Details -->
+        <section class="seo-section">
+            <h2 class="seo-title">Free PDF Merger & Editing Workspace</h2>
+            <p class="seo-subtitle">Modify your PDF documents safely inside browser memory. Combine files, extract page sequences, reorder list grids, compress sizes, and translate pages to images locally.</p>
+            
+            <div class="seo-content-grid">
+                <div class="seo-card">
+                    <h3>100% Client-Side Privacy Protection</h3>
+                    <p>Standard online PDF editors copy your files onto third-party backend servers, creating data leak liabilities. Kyro Core Technologies solves this. Our workspace runs entirely inside your client browser sandboxed engine using pure Javascript compilers.</p>
+                    <p>Your confidential contracts, tax reports, client profiles, and IDs never transverse the internet.</p>
+                </div>
+                <div class="seo-card">
+                    <h3>Flexible Document Operations</h3>
+                    <p>Get all standard corporate editing features: merge pages, partition files using ranges, drag-reorder thumbnails, wrap photographs into single PDF brochures, or output high-resolution vector PDF pages into PNG images.</p>
+                </div>
+            </div>
+
+            <!-- FAQs Accordion -->
+            <div class="faq-accordion">
+                <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How are files merged without server uploads?</div>
+                    <div class="faq-answer">We load your PDFs as raw binary bytes directly into the local browser. The <code>pdf-lib</code> JavaScript package compiles the binary segments, copies pages into new structures, and outputs a downloadable file in the browser memory.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What is the split range parameter syntax?</div>
+                    <div class="faq-answer">To extract pages, define targets separated by commas: e.g., <code>1-3</code> splits pages 1, 2, and 3; typing <code>5</code> adds page 5; and <code>8-10</code> appends pages 8, 9, 10. You can type single page numbers or page ranges together.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is there a maximum file size limit?</div>
+                    <div class="faq-answer">Because compilation relies on your local device RAM, most standard devices easily handle documents up to 100MB or 200 pages without any lags. Large files process in milliseconds.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Kyro Business Tools. All rights reserved. Designed and developed by Kyro Core Technologies.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- pdf-lib CDN for local PDF editing -->
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    
+    <!-- PDF.js CDN for client-side rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+
+    <!-- Theme Manager -->
+    <script src="assets/js/theme.js"></script>
+    <!-- PDF Tools Handler -->
+    <script src="assets/js/pdf-tools.js"></script>
+</body>
+</html>
