@@ -199,7 +199,10 @@
     <script>
         // Dynamically load Puter.js if not running from file:///
         const isLocalFile = window.location.protocol === 'file:';
-        if (!isLocalFile) {
+        if (isLocalFile) {
+            const warningEl = document.getElementById("local-file-warning");
+            if (warningEl) warningEl.style.display = "block";
+        } else {
             const script = document.createElement('script');
             script.src = 'https://js.puter.com/v2/';
             document.head.appendChild(script);
@@ -211,16 +214,6 @@
             const lengthSelect = document.getElementById("brand-length");
             const generateBtn = document.getElementById("generate-names-btn");
             const resultsContainer = document.getElementById("names-results-container");
-
-            // Dynamically load Puter.js if not running from file:///
-            if (isLocalFile) {
-                const warningEl = document.getElementById("local-file-warning");
-                if (warningEl) warningEl.style.display = "block";
-            } else {
-                const script = document.createElement('script');
-                script.src = 'https://js.puter.com/v2/';
-                document.head.appendChild(script);
-            }
 
             generateBtn.addEventListener("click", async () => {
                 const keywords = keywordsInput.value.trim();
