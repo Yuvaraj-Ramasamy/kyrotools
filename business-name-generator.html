@@ -406,7 +406,7 @@
         }
 
         async function callAI(systemPrompt, promptText) {
-            const provider = localStorage.getItem("ai-provider") || "puter";
+            const provider = aiProviderSelect.value;
             
             if (provider === "puter") {
                 if (typeof puter === "undefined") {
