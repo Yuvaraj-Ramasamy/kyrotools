@@ -190,10 +190,30 @@
             const downloadBtn = document.getElementById("download-qr-btn");
 
             // Sync Hex Input values
-            colorDark.addEventListener("input", (e) => { colorDarkHex.value = e.target.value; generateQR(); });
-            colorDarkHex.addEventListener("input", (e) => { colorDark.value = e.target.value; generateQR(); });
-            colorLight.addEventListener("input", (e) => { colorLightHex.value = e.target.value; generateQR(); });
-            colorLightHex.addEventListener("input", (e) => { colorLight.value = e.target.value; generateQR(); });
+            colorDark.addEventListener("input", (e) => {
+                colorDarkHex.value = e.target.value;
+                generateQR();
+            });
+            colorDarkHex.addEventListener("input", (e) => {
+                let val = e.target.value.trim();
+                if (val && !val.startsWith("#")) val = "#" + val;
+                if (/^#[0-9A-F]{6}$/i.test(val)) {
+                    colorDark.value = val;
+                    generateQR();
+                }
+            });
+            colorLight.addEventListener("input", (e) => {
+                colorLightHex.value = e.target.value;
+                generateQR();
+            });
+            colorLightHex.addEventListener("input", (e) => {
+                let val = e.target.value.trim();
+                if (val && !val.startsWith("#")) val = "#" + val;
+                if (/^#[0-9A-F]{6}$/i.test(val)) {
+                    colorLight.value = val;
+                    generateQR();
+                }
+            });
 
             // Triggers
             dataInput.addEventListener("input", generateQR);
@@ -215,20 +235,48 @@
                     qr.addData(text);
                     qr.make();
 
-                    // Generate image tag
-                    const cellSize = Math.floor(size / qr.getModuleCount());
-                    const margin = Math.floor((size - (cellSize * qr.getModuleCount())) / 2);
-
-                    // render as base64 img inside container
-                    previewContainer.innerHTML = qr.createImgTag(cellSize, margin);
+                    const moduleCount = qr.getModuleCount();
                     
-                    // Style the image
-                    const img = previewContainer.querySelector("img");
+                    // Generate high-resolution output (4x preview size)
+                    const scaleFactor = 4;
+                    const targetSize = size * scaleFactor;
+                    const cellSize = Math.floor(targetSize / moduleCount);
+                    const canvasSize = cellSize * moduleCount;
+
+                    // Create drawing canvas
+                    const canvas = document.createElement("canvas");
+                    canvas.width = canvasSize;
+                    canvas.height = canvasSize;
+                    const ctx = canvas.getContext("2d");
+
+                    // Keep modules perfectly crisp
+                    ctx.imageSmoothingEnabled = false;
+
+                    // Draw Background
+                    ctx.fillStyle = cLight;
+                    ctx.fillRect(0, 0, canvasSize, canvasSize);
+
+                    // Draw Modules
+                    ctx.fillStyle = cDark;
+                    for (let r = 0; r < moduleCount; r++) {
+                        for (let c = 0; c < moduleCount; c++) {
+                            if (qr.isDark(r, c)) {
+                                ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+                            }
+                        }
+                    }
+
+                    // Render as base64 img inside container
+                    previewContainer.innerHTML = "";
+                    const img = document.createElement("img");
+                    img.src = canvas.toDataURL("image/png");
+                    img.style.width = `${size}px`;
                     img.style.maxWidth = "100%";
                     img.style.height = "auto";
                     img.style.display = "block";
                     img.style.borderRadius = "var(--radius-sm)";
                     img.id = "generated-qr-img";
+                    previewContainer.appendChild(img);
                 } catch (e) {
                     console.error("QR Code generation error:", e);
                 }
