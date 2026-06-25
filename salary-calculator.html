@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Take-Home Calculator | Kyro</title>
+    
+    <script>
+        // Force Dark Mode
+        (function() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('kyro-theme', 'dark');
+        })();
+    </script>
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        .salary-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .salary-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        .salary-result-card {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .salary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 0;
+            font-size: 0.95rem;
+        }
+        .salary-row.net {
+            border-top: 2px solid var(--success);
+            border-bottom: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="invoice-generator.html" class="nav-link">Invoice</a>
+                <a href="quotation-generator.html" class="nav-link">Quotation</a>
+                <a href="resume-builder.html" class="nav-link">Resume Builder</a>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Calculators <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="gst-calculator.html">GST Calculator</a>
+                        <a href="emi-calculator.html">EMI Calculator</a>
+                        <a href="profit-calculator.html">Profit Calculator</a>
+                        <a href="tax-calculator.html">Tax Calculator</a>
+                        <a href="salary-calculator.html">Salary Calculator</a>
+                        <a href="contract-calculator.html">Contract Calculator</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Utilities <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="pdf-tools.html">PDF Tool Suite</a>
+                        <a href="qr-generator.html">QR Code Generator</a>
+                        <a href="barcode-generator.html">Barcode Generator</a>
+                        <a href="currency-converter.html">Currency Converter</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="#" class="nav-link">AI Workspace <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="freelancer-ai.html">AI Freelancer Assistant</a>
+                        <a href="business-name-generator.html">AI Business Name Gen</a>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="nav-actions">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu">
+                    <i data-lucide="menu"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
+                    Back Hub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="container">
+        <div class="hero-section" style="padding: 40px 0 20px 0;">
+            <h1 style="font-size: 2.5rem; background: linear-gradient(135deg, #818cf8, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Salary Take-Home Calculator</h1>
+            <p>Model your monthly cash flow. Enter your basic pay, allowances, and mandatory deductions to estimate net pay.</p>
+        </div>
+
+        <div class="salary-layout">
+            <!-- Left: Settings Form -->
+            <div class="card">
+                <h3 class="mb-4" style="font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="wallet" style="color: var(--primary);"></i> Salary Breakdowns
+                </h3>
+                
+                <div class="form-group">
+                    <label for="sal-basic">Basic Monthly Pay</label>
+                    <input type="number" id="sal-basic" value="50000" min="0">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sal-hra">HRA Allowance</label>
+                        <input type="number" id="sal-hra" value="20000" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="sal-allowance">Special Allowances</label>
+                        <input type="number" id="sal-allowance" value="15000" min="0">
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+
+                <h3 class="mb-4" style="font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="shield-alert" style="color: var(--secondary);"></i> Deductions
+                </h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sal-pf">Provident Fund (PF)</label>
+                        <input type="number" id="sal-pf" value="1800" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="sal-tax">Withholding Tax (TDS / PAYE)</label>
+                        <input type="number" id="sal-tax" value="8500" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Results Card -->
+            <div class="salary-result-card">
+                <div>
+                    <h3 class="mb-4" style="font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="coins" style="color: var(--success);"></i> Monthly Summary
+                    </h3>
+
+                    <div class="salary-row">
+                        <span>Gross Earnings</span>
+                        <strong id="sal-gross" style="color: var(--primary);">$85,000.00</strong>
+                    </div>
+
+                    <div class="salary-row">
+                        <span>Total Deductions</span>
+                        <strong id="sal-deductions" style="color: var(--danger);">$10,300.00</strong>
+                    </div>
+
+                    <div class="salary-row net">
+                        <span>Net Take-home Salary</span>
+                        <strong id="sal-net" style="color: var(--success); font-size: 1.6rem;">$74,700.00</strong>
+                    </div>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.02); padding: 12px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-muted); margin-top: 20px;">
+                    Take-home salary = (Basic + HRA + Special Allowances) - (PF + Withholding Tax).
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Kyro Core Technologies. All rights reserved. Compensation Estimators.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="assets/js/theme.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const basicInput = document.getElementById("sal-basic");
+            const hraInput = document.getElementById("sal-hra");
+            const allowanceInput = document.getElementById("sal-allowance");
+            const pfInput = document.getElementById("sal-pf");
+            const taxInput = document.getElementById("sal-tax");
+
+            const gDisplay = document.getElementById("sal-gross");
+            const dDisplay = document.getElementById("sal-deductions");
+            const nDisplay = document.getElementById("sal-net");
+
+            const inputs = [basicInput, hraInput, allowanceInput, pfInput, taxInput];
+            inputs.forEach(input => input.addEventListener("input", calculateSalary));
+
+            function calculateSalary() {
+                const basic = parseFloat(basicInput.value) || 0;
+                const hra = parseFloat(hraInput.value) || 0;
+                const allowance = parseFloat(allowanceInput.value) || 0;
+                const pf = parseFloat(pfInput.value) || 0;
+                const tax = parseFloat(taxInput.value) || 0;
+
+                const gross = basic + hra + allowance;
+                const deductions = pf + tax;
+                const net = gross - deductions;
+
+                gDisplay.textContent = `${gross.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                dDisplay.textContent = `${deductions.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                nDisplay.textContent = `${net.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            }
+
+            calculateSalary();
+        });
+    </script>
+</body>
+</html>

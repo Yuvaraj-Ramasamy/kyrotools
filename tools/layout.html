@@ -1,0 +1,67 @@
+<!-- layout.html: shared header, navigation, and footer -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kyro Business Tools</title>
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="assets/js/theme.js" defer></script>
+    <!-- Prevent FOUC -->
+    <script>
+        (function() {
+            const theme = 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+</head>
+<body>
+    <!-- Background glow shapes (reuse from index) -->
+    <div style="position: absolute; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0) 70%); top: -100px; left: -100px; pointer-events: none; z-index: -1;"></div>
+    <div style="position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(236,72,153,0.1) 0%, rgba(236,72,153,0) 70%); top: 40%; right: -200px; pointer-events: none; z-index: -1;"></div>
+
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link active">Dashboard</a>
+                <a href="tools/invoice.html" class="nav-link">Invoice</a>
+                <a href="tools/quotation.html" class="nav-link">Quotation</a>
+                <a href="tools/resume.html" class="nav-link">Resume</a>
+                <a href="gst-calculator.html" class="nav-link">GST</a>
+                <a href="emi-calculator.html" class="nav-link">EMI</a>
+                <a href="tools/pdf-tool.html" class="nav-link">PDF</a>
+                <a href="tools/qr.html" class="nav-link">QR</a>
+                <a href="tools/barcode.html" class="nav-link">Barcode</a>
+                <a href="tools/currency.html" class="nav-link">Currency</a>
+                <a href="tools/profit.html" class="nav-link">Profit</a>
+                <a href="tools/tax.html" class="nav-link">Tax</a>
+                <a href="tools/salary.html" class="nav-link">Salary</a>
+                <a href="tools/contract.html" class="nav-link">Contract</a>
+                <a href="tools/freelancer.html" class="nav-link">Freelancer AI</a>
+                <a href="tools/business-name.html" class="nav-link">Biz Name</a>
+            </nav>
+            <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </header>
+
+    <main id="main-content" class="container">
+        <!-- Page specific content will be injected here by each tool page -->
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; ${new Date().getFullYear()} Kyro Core Technologies. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="assets/js/common.js" defer></script>
+</body>
+</html>

@@ -1451,3 +1451,205 @@ html, body {
         margin-left: auto;
     }
 }
+
+/* ==========================================
+   DROPDOWN & UTILITY CSS ADDITIONS
+   ========================================== */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--bg-secondary);
+    min-width: 220px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    z-index: 250;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 0;
+    backdrop-filter: blur(12px);
+}
+
+.dropdown-content a {
+    color: var(--text-secondary);
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.dropdown-content a:hover {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .dropdown {
+        width: 100%;
+        text-align: center;
+    }
+    .dropdown-content {
+        position: static;
+        display: block;
+        box-shadow: none;
+        border: none;
+        padding-left: 0;
+        background: transparent;
+        transform: none;
+        min-width: 100%;
+    }
+    .dropdown-content a {
+        padding: 8px 0;
+        font-size: 0.95rem;
+    }
+}
+
+/* Chat bubble styling for Freelancer AI */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 450px;
+    background: rgba(17, 24, 39, 0.4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chat-bubble {
+    max-width: 75%;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.chat-bubble.user {
+    background: var(--primary);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+.chat-bubble.ai {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+}
+
+.chat-input-area {
+    display: flex;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+}
+
+.chat-input {
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    padding: 16px;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.chat-send-btn {
+    background: var(--primary);
+    border: none;
+    color: white;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.chat-send-btn:hover {
+    background: var(--primary-hover);
+}
+
+/* QR Code styling preview */
+#qr-preview, #barcode-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    margin: 20px auto;
+    width: fit-content;
+    box-shadow: var(--shadow-md);
+}
+
+/* Resume Builder grid */
+.resume-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 30px;
+}
+
+@media (max-width: 1024px) {
+    .resume-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.resume-preview-box {
+    background: #fff;
+    color: #333;
+    padding: 30px;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-lg);
+    font-family: 'Inter', sans-serif;
+    min-height: 700px;
+    overflow-y: auto;
+}
+
+/* Invoice Templates custom modifications */
+.invoice-preview-box.template-minimal {
+    border-top: 4px solid var(--text-muted);
+}
+.invoice-preview-box.template-compact {
+    padding: 20px;
+    font-size: 0.85rem;
+}
+.invoice-preview-box.template-executive {
+    border-top: 10px double var(--warning);
+}
+.invoice-preview-box.template-creative {
+    background: linear-gradient(to bottom, #111827 0%, #1f2937 100%);
+    color: #f3f4f6 !important;
+}
+.invoice-preview-box.template-creative * {
+    color: #f3f4f6 !important;
+}
+.invoice-preview-box.template-editorial {
+    border-top: 2px solid var(--text-primary);
+    border-bottom: 2px solid var(--text-primary);
+}
+.invoice-preview-box.template-tech {
+    font-family: monospace;
+    border-top: 5px solid var(--success);
+}
+.invoice-preview-box.template-corporate {
+    border-top: 8px solid var(--primary-hover);
+}
+

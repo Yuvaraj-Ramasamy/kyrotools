@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Barcode Generator | Kyro</title>
+    
+    <script>
+        // Force Dark Mode
+        (function() {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('kyro-theme', 'dark');
+        })();
+    </script>
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        .barcode-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .barcode-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo" onclick="window.location.href='index.html'">
+                Kyro <span>Tools</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="invoice-generator.html" class="nav-link">Invoice</a>
+                <a href="quotation-generator.html" class="nav-link">Quotation</a>
+                <a href="resume-builder.html" class="nav-link">Resume Builder</a>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Calculators <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="gst-calculator.html">GST Calculator</a>
+                        <a href="emi-calculator.html">EMI Calculator</a>
+                        <a href="profit-calculator.html">Profit Calculator</a>
+                        <a href="tax-calculator.html">Tax Calculator</a>
+                        <a href="salary-calculator.html">Salary Calculator</a>
+                        <a href="contract-calculator.html">Contract Calculator</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Utilities <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="pdf-tools.html">PDF Tool Suite</a>
+                        <a href="qr-generator.html">QR Code Generator</a>
+                        <a href="barcode-generator.html">Barcode Generator</a>
+                        <a href="currency-converter.html">Currency Converter</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="#" class="nav-link">AI Workspace <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="freelancer-ai.html">AI Freelancer Assistant</a>
+                        <a href="business-name-generator.html">AI Business Name Gen</a>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="nav-actions">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu">
+                    <i data-lucide="menu"></i>
+                </button>
+                <a href="index.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;">
+                    Back Hub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="container">
+        <div class="hero-section" style="padding: 40px 0 20px 0;">
+            <h1 style="font-size: 2.5rem; background: linear-gradient(135deg, #818cf8, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Premium Barcode Generator</h1>
+            <p>Generate retail-ready barcodes client-side. Supports major formats including Code128, EAN, UPC, and Code39. Export as SVG or PNG.</p>
+        </div>
+
+        <div class="barcode-layout">
+            <!-- Left: Settings Form -->
+            <div class="card">
+                <h3 class="mb-4" style="font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="sliders" style="color: var(--primary);"></i> Customize Settings
+                </h3>
+                
+                <div class="form-group">
+                    <label for="barcode-data">Barcode Value (Numbers or Text)</label>
+                    <input type="text" id="barcode-data" value="123456789012" placeholder="e.g. 123456789012">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="barcode-format">Format / symbology</label>
+                        <select id="barcode-format">
+                            <option value="CODE128">Code 128 (Standard)</option>
+                            <option value="EAN13">EAN-13 (13 numbers)</option>
+                            <option value="UPC">UPC-A (12 numbers)</option>
+                            <option value="CODE39">Code 39 (Alphanumeric)</option>
+                            <option value="ITF14">ITF-14 (14 numbers)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="barcode-height">Bar Height (px)</label>
+                        <select id="barcode-height">
+                            <option value="50">50 px</option>
+                            <option value="80" selected>80 px</option>
+                            <option value="100">100 px</option>
+                            <option value="150">150 px</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="barcode-width">Bar Width (thickness)</label>
+                        <select id="barcode-width">
+                            <option value="1">1 (Thin)</option>
+                            <option value="2" selected>2 (Medium)</option>
+                            <option value="3">3 (Thick)</option>
+                            <option value="4">4 (Very Thick)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="barcode-text-toggle" style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="barcode-text-toggle" checked style="width: auto; cursor: pointer;"> Display Text below bar
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Preview and Export -->
+            <div class="card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+                <h3 class="mb-4" style="font-size: 1.25rem;">Barcode Preview</h3>
+                
+                <div id="barcode-preview">
+                    <!-- SVG barcode injected by JsBarcode -->
+                    <svg id="barcode-canvas"></svg>
+                </div>
+
+                <button id="download-barcode-btn" class="btn btn-primary mt-4" style="width: 80%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i data-lucide="download"></i> Download PNG
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Kyro Core Technologies. All rights reserved. Premium Barcode Utilities.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="assets/js/theme.js"></script>
+    <!-- JsBarcode Library CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const dataInput = document.getElementById("barcode-data");
+            const formatSelect = document.getElementById("barcode-format");
+            const heightSelect = document.getElementById("barcode-height");
+            const widthSelect = document.getElementById("barcode-width");
+            const textToggle = document.getElementById("barcode-text-toggle");
+            const downloadBtn = document.getElementById("download-barcode-btn");
+
+            // Format check helper
+            formatSelect.addEventListener("change", () => {
+                const fmt = formatSelect.value;
+                if (fmt === "EAN13" && dataInput.value.length !== 13) {
+                    dataInput.value = "9780201379624"; // valid EAN13 default
+                } else if (fmt === "UPC" && dataInput.value.length !== 12) {
+                    dataInput.value = "123456789012"; // valid UPC default
+                }
+                generateBarcode();
+            });
+
+            dataInput.addEventListener("input", generateBarcode);
+            heightSelect.addEventListener("change", generateBarcode);
+            widthSelect.addEventListener("change", generateBarcode);
+            textToggle.addEventListener("change", generateBarcode);
+
+            function generateBarcode() {
+                try {
+                    const text = dataInput.value || "123456";
+                    const format = formatSelect.value;
+                    const height = parseInt(heightSelect.value);
+                    const width = parseInt(widthSelect.value);
+                    const displayValue = textToggle.checked;
+
+                    JsBarcode("#barcode-canvas", text, {
+                        format: format,
+                        height: height,
+                        width: width,
+                        displayValue: displayValue,
+                        background: "#ffffff",
+                        lineColor: "#000000",
+                        margin: 10
+                    });
+                } catch (e) {
+                    console.error("Barcode generation error:", e);
+                }
+            }
+
+            // Export SVG preview to downloadable PNG
+            downloadBtn.addEventListener("click", () => {
+                const svg = document.getElementById("barcode-canvas");
+                const svgString = new XMLSerializer().serializeToString(svg);
+                const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+                
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                const img = new Image();
+                
+                img.onload = () => {
+                    canvas.width = img.width * 2; // double scaling for premium quality
+                    canvas.height = img.height * 2;
+                    ctx.scale(2, 2);
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(0, 0, img.width, img.height);
+                    ctx.drawImage(img, 0, 0);
+                    
+                    const pngUrl = canvas.toDataURL("image/png");
+                    const a = document.createElement("a");
+                    a.href = pngUrl;
+                    a.download = "kyro-barcode.png";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                };
+                
+                const URL = window.URL || window.webkitURL || window;
+                img.src = URL.createObjectURL(svgBlob);
+            });
+
+            generateBarcode();
+        });
+    </script>
+</body>
+</html>

@@ -8,7 +8,7 @@
     <script>
         // Prevent theme flash of light unstyled content (FOUC)
         (function() {
-            const theme = localStorage.getItem('kyro-theme') || 'light';
+            const theme = 'dark';
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
@@ -55,9 +55,37 @@
                 <a href="index.html" class="nav-link">Dashboard</a>
                 <a href="invoice-generator.html" class="nav-link">Invoice</a>
                 <a href="quotation-generator.html" class="nav-link active">Quotation</a>
-                <a href="gst-calculator.html" class="nav-link">GST</a>
-                <a href="emi-calculator.html" class="nav-link">EMI</a>
-                <a href="pdf-merger.html" class="nav-link">PDF Suite</a>
+                <a href="resume-builder.html" class="nav-link">Resume Builder</a>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Calculators <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="gst-calculator.html">GST Calculator</a>
+                        <a href="emi-calculator.html">EMI Calculator</a>
+                        <a href="profit-calculator.html">Profit Calculator</a>
+                        <a href="tax-calculator.html">Tax Calculator</a>
+                        <a href="salary-calculator.html">Salary Calculator</a>
+                        <a href="contract-calculator.html">Contract Calculator</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="#" class="nav-link">Utilities <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="pdf-tools.html">PDF Tool Suite</a>
+                        <a href="qr-generator.html">QR Code Generator</a>
+                        <a href="barcode-generator.html">Barcode Generator</a>
+                        <a href="currency-converter.html">Currency Converter</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="#" class="nav-link">AI Workspace <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="freelancer-ai.html">AI Freelancer Assistant</a>
+                        <a href="business-name-generator.html">AI Business Name Gen</a>
+                    </div>
+                </div>
             </nav>
             
             <div class="nav-actions">
@@ -198,10 +226,17 @@
                 <!-- Template Selector Card -->
                 <div class="card">
                     <h3 class="mb-4" style="font-size: 1.25rem;">Choose Quotation Style</h3>
-                    <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-secondary template-btn active" data-template="modern" style="flex: 1;">Modern (Indigo)</button>
-                        <button class="btn btn-secondary template-btn" data-template="classic" style="flex: 1;">Classic (Serif)</button>
-                        <button class="btn btn-secondary template-btn" data-template="bold" style="flex: 1;">Bold Accent (Pink)</button>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;">
+                        <button class="btn btn-secondary template-btn active" data-template="modern">Modern (Indigo)</button>
+                        <button class="btn btn-secondary template-btn" data-template="classic">Classic (Serif)</button>
+                        <button class="btn btn-secondary template-btn" data-template="bold">Bold (Pink)</button>
+                        <button class="btn btn-secondary template-btn" data-template="minimal">Minimalist</button>
+                        <button class="btn btn-secondary template-btn" data-template="compact">Compact</button>
+                        <button class="btn btn-secondary template-btn" data-template="executive">Executive</button>
+                        <button class="btn btn-secondary template-btn" data-template="creative">Creative</button>
+                        <button class="btn btn-secondary template-btn" data-template="editorial">Editorial</button>
+                        <button class="btn btn-secondary template-btn" data-template="tech">Tech (Mono)</button>
+                        <button class="btn btn-secondary template-btn" data-template="corporate">Corporate</button>
                     </div>
                 </div>
             </div>
