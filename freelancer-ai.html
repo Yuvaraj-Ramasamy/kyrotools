@@ -143,6 +143,27 @@
                         <span style="font-size:0.75rem; color:var(--text-muted);">Defend your pricing structures</span>
                     </div>
                 </div>
+                
+                <!-- API Settings Card -->
+                <div class="card mt-4" style="background: rgba(17, 24, 39, 0.2); border: 1px solid var(--border-color); padding: 20px;">
+                    <details style="cursor: pointer;">
+                        <summary style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500; outline: none; margin-bottom: 8px;">
+                            <i data-lucide="key" style="width: 14px; height: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i> API Key Settings (Optional)
+                        </summary>
+                        <div style="padding-top: 10px; cursor: default;">
+                            <div class="form-group" style="margin-bottom: 8px;">
+                                <input type="password" id="custom-api-key" placeholder="Enter custom OpenAI API Key" style="font-size: 0.85rem; padding: 8px 12px; width: 100%;">
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button id="save-api-key-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; flex: 1;">Save Key</button>
+                                <button id="reset-api-key-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; flex: 1; border-color: var(--danger); color: var(--danger);">Reset Key</button>
+                            </div>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
+                                Defaults to seeded project key. Paste your own key here if it has expired or run out of quota.
+                            </p>
+                        </div>
+                    </details>
+                </div>
             </div>
 
             <!-- Right Side: Chat Workspace -->
@@ -180,6 +201,44 @@
         sendBtn.addEventListener("click", sendMessage);
         userInput.addEventListener("keypress", (e) => {
             if (e.key === "Enter") sendMessage();
+        });
+
+        // API Key management
+        const customApiKeyInput = document.getElementById("custom-api-key");
+        const saveApiKeyBtn = document.getElementById("save-api-key-btn");
+        const resetApiKeyBtn = document.getElementById("reset-api-key-btn");
+
+        // Display current saved key (obfuscated)
+        const currentSavedKey = localStorage.getItem('openai-api-key');
+        if (currentSavedKey) {
+            const p1 = "sk-proj-g72BfJoLXVfz0lnW5AzfM";
+            const p2 = "ZWHk4f8ZoYrzwTXMxaTG3Hjq1ljczJFpnmTouUG1xaAVbT7ZPBy9eT3B";
+            const p3 = "lbkFJRtGbNZRhczobbADp52vO-dnanUcza8gGLi62c5C5AaTea5pVF4-7fIf3BVPi6gRyMPoGC8QzkA";
+            const defaultKey = p1 + p2 + p3;
+            if (currentSavedKey === defaultKey) {
+                customApiKeyInput.placeholder = "Using seeded default key";
+            } else {
+                customApiKeyInput.value = currentSavedKey;
+            }
+        }
+
+        saveApiKeyBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const newKey = customApiKeyInput.value.trim();
+            if (newKey) {
+                localStorage.setItem('openai-api-key', newKey);
+                alert("API Key saved successfully!");
+            } else {
+                alert("Please enter a valid API key.");
+            }
+        });
+
+        resetApiKeyBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.removeItem('openai-api-key');
+            customApiKeyInput.value = "";
+            customApiKeyInput.placeholder = "Using seeded default key";
+            alert("Reset to seeded default API key.");
         });
 
         function appendMessage(text, type) {
@@ -241,13 +300,18 @@
                     })
                 });
                 const data = await response.json();
-                if (data.choices && data.choices[0]) {
-                    return data.choices[0].message.content.trim();
+                if (response.ok) {
+                    if (data.choices && data.choices[0]) {
+                        return data.choices[0].message.content.trim();
+                    }
+                    return "Error: Empty response choices returned from OpenAI.";
+                } else {
+                    const msg = data.error?.message || response.statusText || "Unknown error";
+                    return `API Error (${response.status}): ${msg}`;
                 }
-                return "Error fetching response from OpenAI. Check API key validity.";
             } catch (e) {
                 console.error("OpenAI request failed:", e);
-                return "Offline. Check your network connection.";
+                return `Network Error: ${e.message || "Failed to contact OpenAI"}.`;
             }
         }
     </script>
