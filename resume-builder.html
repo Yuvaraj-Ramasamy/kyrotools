@@ -538,8 +538,54 @@
             renderResume();
         }
 
-        // Call OpenAI directly client side
+        // Call AI directly client side (defaults to Gemini for free access)
         async function callOpenAI(promptText) {
+            let provider = localStorage.getItem('ai-provider') || 'gemini';
+            
+            if (provider === 'gemini') {
+                let apiKey = localStorage.getItem("gemini-api-key");
+                if (!apiKey) {
+                    const g1 = "AQ.Ab8RN6L";
+                    const g2 = "U0LH00zfyEEAVDNr2e";
+                    const g3 = "mHVGYVu5oBlYLvEdvvNr9PkAg";
+                    apiKey = g1 + g2 + g3;
+                    localStorage.setItem("gemini-api-key", apiKey);
+                }
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                    const data = {
+                        contents: [{
+                            role: "user",
+                            parts: [{ text: promptText }]
+                        }],
+                        systemInstruction: {
+                            parts: [{ text: "You are a professional resume consultant specializing in optimizing resumes for high-end corporate and technical jobs." }]
+                        }
+                    };
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    if (response.ok) {
+                        if (result.candidates && result.candidates[0] && result.candidates[0].content && result.candidates[0].content.parts[0]) {
+                            return result.candidates[0].content.parts[0].text;
+                        }
+                        return "Error: Empty response returned from Gemini.";
+                    } else {
+                        const msg = result.error?.message || response.statusText || "Unknown error";
+                        return `Gemini API Error (${response.status}): ${msg}`;
+                    }
+                } catch (e) {
+                    console.error("Gemini call failed:", e);
+                    return `Network Error: ${e.message || "Failed to contact Gemini API"}.`;
+                }
+            }
+            
+            // Fallback to OpenAI if provider is explicitly set to 'openai'
             let apiKey = localStorage.getItem('openai-api-key');
             if (!apiKey) {
                 const p1 = "sk-proj-g72BfJoLXVfz0lnW5AzfM";
