@@ -45,12 +45,12 @@
 }
 
 [data-theme="dark"] {
-    /* Color Palette - Dark Mode */
-    --bg-primary: #090d16;
-    --bg-secondary: #111827;
-    --bg-tertiary: #1f2937;
-    --border-color: rgba(255, 255, 255, 0.06);
-    --border-hover: rgba(255, 255, 255, 0.15);
+    /* Color Palette - Premium Dark Mode */
+    --bg-primary: #030712;
+    --bg-secondary: #0b0f19;
+    --bg-tertiary: #111827;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.18);
     
     --text-primary: #f3f4f6;
     --text-secondary: #9ca3af;
@@ -67,10 +67,10 @@
     --success-hover: #10b981;
     --success-light: rgba(52, 211, 153, 0.15);
     
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
-    --shadow-glow: 0 0 25px rgba(129, 140, 248, 0.2);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.7);
+    --shadow-md: 0 8px 16px -2px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+    --shadow-glow: 0 0 35px rgba(129, 140, 248, 0.25);
 }
 
 /* ==========================================
@@ -377,11 +377,13 @@ footer {
    CARDS AND MAIN WRAPPERS
    ========================================== */
 .card {
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    background-color: rgba(17, 24, 39, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
     padding: 24px;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
     transition: var(--transition);
 }
 
