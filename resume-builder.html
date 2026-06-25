@@ -309,6 +309,14 @@
     
     <!-- Script Controller -->
     <script>
+        // Dynamically load Puter.js if not running from file:///
+        const isLocalFile = window.location.protocol === 'file:';
+        if (!isLocalFile) {
+            const script = document.createElement('script');
+            script.src = 'https://js.puter.com/v2/';
+            document.head.appendChild(script);
+        }
+
         // Resume generator JS logic
         const templates = [];
         // Generate list of 50 templates
@@ -404,7 +412,13 @@
 
                 summaryEl.value = "AI is polishing your summary...";
                 const polished = await callOpenAI(`Rewrite and optimize the following professional summary for a resume to make it extremely premium, concise, and impact-driven: "${currentText}"`);
-                summaryEl.value = polished;
+                
+                if (polished.includes("Error:") || polished.includes("Network Error") || polished.includes("Unsupported Protocol")) {
+                    alert(polished);
+                    summaryEl.value = currentText;
+                } else {
+                    summaryEl.value = polished;
+                }
                 renderResume();
             });
 
@@ -519,7 +533,13 @@
             updateExp(id, 'desc', "AI is rewriting description...");
             renderFormLists();
             const enhanced = await callOpenAI(`Rewrite this work description to sound highly professional, metric-driven, and filled with power verbs appropriate for a premium resume: "${original}"`);
-            updateExp(id, 'desc', enhanced);
+            
+            if (enhanced.includes("Error:") || enhanced.includes("Network Error") || enhanced.includes("Unsupported Protocol")) {
+                alert(enhanced);
+                updateExp(id, 'desc', original);
+            } else {
+                updateExp(id, 'desc', enhanced);
+            }
             renderFormLists();
             renderResume();
         }
@@ -538,87 +558,28 @@
             renderResume();
         }
 
-        // Call AI directly client side (defaults to Gemini for free access)
+        // Call AI directly client side (using Puter.js Keyless Free AI)
         async function callOpenAI(promptText) {
-            let provider = localStorage.getItem('ai-provider') || 'gemini';
-            
-            if (provider === 'gemini') {
-                let apiKey = localStorage.getItem("gemini-api-key");
-                if (!apiKey) {
-                    const g1 = "AQ.Ab8RN6L";
-                    const g2 = "U0LH00zfyEEAVDNr2e";
-                    const g3 = "mHVGYVu5oBlYLvEdvvNr9PkAg";
-                    apiKey = g1 + g2 + g3;
-                    localStorage.setItem("gemini-api-key", apiKey);
+            if (typeof puter === "undefined") {
+                if (window.location.protocol === 'file:') {
+                    return "Unsupported Protocol Error: Puter.js does not support the file:/// protocol. Please serve this file from a local web server (e.g. http://localhost) to use AI features.";
                 }
-                try {
-                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-                    const data = {
-                        contents: [{
-                            role: "user",
-                            parts: [{ text: promptText }]
-                        }],
-                        systemInstruction: {
-                            parts: [{ text: "You are a professional resume consultant specializing in optimizing resumes for high-end corporate and technical jobs." }]
-                        }
-                    };
-                    const response = await fetch(url, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(data)
-                    });
-                    const result = await response.json();
-                    if (response.ok) {
-                        if (result.candidates && result.candidates[0] && result.candidates[0].content && result.candidates[0].content.parts[0]) {
-                            return result.candidates[0].content.parts[0].text;
-                        }
-                        return "Error: Empty response returned from Gemini.";
-                    } else {
-                        const msg = result.error?.message || response.statusText || "Unknown error";
-                        return `Gemini API Error (${response.status}): ${msg}`;
-                    }
-                } catch (e) {
-                    console.error("Gemini call failed:", e);
-                    return `Network Error: ${e.message || "Failed to contact Gemini API"}.`;
-                }
-            }
-            
-            // Fallback to OpenAI if provider is explicitly set to 'openai'
-            let apiKey = localStorage.getItem('openai-api-key');
-            if (!apiKey) {
-                const p1 = "sk-proj-g72BfJoLXVfz0lnW5AzfM";
-                const p2 = "ZWHk4f8ZoYrzwTXMxaTG3Hjq1ljczJFpnmTouUG1xaAVbT7ZPBy9eT3B";
-                const p3 = "lbkFJRtGbNZRhczobbADp52vO-dnanUcza8gGLi62c5C5AaTea5pVF4-7fIf3BVPi6gRyMPoGC8QzkA";
-                apiKey = p1 + p2 + p3;
-                localStorage.setItem('openai-api-key', apiKey);
+                return "Network Error: Free Keyless AI library (Puter.js) failed to load. Please check your network connection or disable ad blockers.";
             }
             try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-3.5-turbo',
-                        messages: [
-                            { role: "system", content: "You are a professional resume consultant specializing in optimizing resumes for high-end corporate and technical jobs." },
-                            { role: "user", content: promptText }
-                        ],
-                        max_tokens: 250,
-                        temperature: 0.7
-                    })
-                });
-                const data = await response.json();
-                if (data.choices && data.choices[0]) {
-                    return data.choices[0].message.content.trim();
+                const systemPrompt = "You are a professional resume consultant specializing in optimizing resumes for high-end corporate and technical jobs.";
+                const messages = [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: promptText }
+                ];
+                try {
+                    return await puter.ai.chat(messages, { model: 'gpt-4o-mini' });
+                } catch (e) {
+                    return await puter.ai.chat(messages);
                 }
-                return "Error generating response from OpenAI API. Please check your API key validity.";
             } catch (e) {
-                console.error("OpenAI call failed:", e);
-                return "Failed to connect to AI server. Check your internet connection.";
+                console.error("Puter AI Chat request failed:", e);
+                return `Puter AI Error: ${e.message || "Failed to get response from Puter free model"}.`;
             }
         }
 
