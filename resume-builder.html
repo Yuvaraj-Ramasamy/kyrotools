@@ -198,14 +198,14 @@
                 <div class="card mb-4" style="background: rgba(17, 24, 39, 0.2); border: 1px solid var(--border-color); padding: 20px;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
                         <i data-lucide="cpu" style="width: 16px; height: 16px; color: var(--primary);"></i>
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">AI Engine: Puter.js</span>
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">AI Engine: KyroGPT Engine</span>
                         <span class="status-badge" style="font-size: 0.7rem; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Keyless Free</span>
                     </div>
                     <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; margin: 0;">
-                        Powered by Puter.js Keyless Free AI. No configuration or API keys required.
+                        Powered by KyroTools Keyless Free AI. No configuration or API keys required.
                     </p>
                     <div id="local-file-warning" style="margin-top: 10px; font-size: 0.75rem; color: var(--warning); display: none; line-height: 1.4;">
-                        ⚠️ Puter.js requires this tool to be run from a local web server (e.g. <code>npm run dev</code> or python server) or hosted online. It will not work when opened directly via <code>file:///</code>.
+                        ⚠️ Keyless AI features require this tool to be run from a local web server (e.g. <code>npm run dev</code> or python server) or hosted online. It will not work when opened directly via <code>file:///</code>.
                     </div>
                 </div>
 
@@ -318,7 +318,7 @@
     
     <!-- Script Controller -->
     <script>
-        // Dynamically load Puter.js if not running from file:///
+        // Dynamically load script if not running from file:///
         const isLocalFile = window.location.protocol === 'file:';
         if (isLocalFile) {
             const warningEl = document.getElementById("local-file-warning");
@@ -570,13 +570,13 @@
             renderResume();
         }
 
-        // Call AI directly client side (using Puter.js Keyless Free AI)
+        // Call AI directly client side (using Keyless Free AI)
         async function callOpenAI(promptText) {
             if (typeof puter === "undefined") {
                 if (window.location.protocol === 'file:') {
-                    return "Unsupported Protocol Error: Puter.js does not support the file:/// protocol. Please serve this file from a local web server (e.g. http://localhost) to use AI features.";
+                    return "Unsupported Protocol Error: The AI engine does not support the file:/// protocol. Please serve this file from a local web server (e.g. http://localhost) to use AI features.";
                 }
-                return "Network Error: Free Keyless AI library (Puter.js) failed to load. Please check your network connection or disable ad blockers.";
+                return "Network Error: Free Keyless AI library failed to load. Please check your network connection or disable ad blockers.";
             }
             try {
                 const systemPrompt = "You are a professional resume consultant specializing in optimizing resumes for high-end corporate and technical jobs.";
@@ -599,8 +599,8 @@
                 }
                 return String(response || "");
             } catch (e) {
-                console.error("Puter AI Chat request failed:", e);
-                return `Puter AI Error: ${e.message || "Failed to get response from Puter free model"}.`;
+                console.error("AI Chat request failed:", e);
+                return `AI Error: ${e.message || "Failed to get response from free model"}.`;
             }
         }
 

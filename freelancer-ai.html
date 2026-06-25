@@ -50,6 +50,9 @@
         .prompt-icon {
             color: var(--primary);
         }
+        .chat-bubble {
+            white-space: pre-wrap !important;
+        }
     </style>
 </head>
 <body>
@@ -142,14 +145,14 @@
                 <div class="card mt-4" style="background: rgba(17, 24, 39, 0.2); border: 1px solid var(--border-color); padding: 20px;">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
                         <i data-lucide="cpu" style="width: 16px; height: 16px; color: var(--primary);"></i>
-                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">AI Engine: Puter.js</span>
+                        <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">AI Engine: KyroGPT Engine</span>
                         <span class="status-badge" style="font-size: 0.7rem; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Keyless Free</span>
                     </div>
                     <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; margin: 0;">
-                        Powered by Puter.js Keyless Free AI. No configuration or API keys required.
+                        Powered by KyroTools Keyless Free AI. No configuration or API keys required.
                     </p>
                     <div id="local-file-warning" style="margin-top: 10px; font-size: 0.75rem; color: var(--warning); display: none; line-height: 1.4;">
-                        ⚠️ Puter.js requires this tool to be run from a local web server (e.g. <code>npm run dev</code> or python server) or hosted online. It will not work when opened directly via <code>file:///</code>.
+                        ⚠️ Keyless AI features require this tool to be run from a local web server (e.g. <code>npm run dev</code> or python server) or hosted online. It will not work when opened directly via <code>file:///</code>.
                     </div>
                 </div>
             </div>
@@ -182,7 +185,7 @@
     <script src="assets/js/theme.js"></script>
     
     <script>
-        // Dynamically load Puter.js if not running from file:///
+        // Dynamically load script if not running from file:///
         const isLocalFile = window.location.protocol === 'file:';
         if (isLocalFile) {
             const warningEl = document.getElementById("local-file-warning");
@@ -224,7 +227,7 @@
             chatContainer.appendChild(loadingBubble);
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            const systemPrompt = "You are a professional business advisor specializing in freelance operations, client communications, contracts, and negotiations.";
+            const systemPrompt = "You are a professional business advisor specializing in freelance operations, client communications, contracts, and negotiations. Always write detailed, friendly, humanized responses with clear paragraphs, list items, and helpful human-readable emojis. Structure your answers logically with bullet points or numbered lists, and format them clearly with double newlines between paragraphs to make them highly readable.";
             const response = await callAI(systemPrompt, query);
             chatContainer.removeChild(loadingBubble);
             appendMessage(response, "ai");
@@ -238,23 +241,32 @@
         async function callAI(systemPrompt, promptText) {
             if (typeof puter === "undefined") {
                 if (window.location.protocol === 'file:') {
-                    return "Unsupported Protocol Error: Puter.js does not support the file:/// protocol. Please run this file from a local web server (e.g. localhost) or host it online to use AI features.";
+                    return "Unsupported Protocol Error: The AI engine does not support the file:/// protocol. Please run this file from a local web server (e.g. localhost) or host it online to use AI features.";
                 }
-                return "Network Error: Free Keyless AI library (Puter.js) failed to load. Please check your network connection or disable ad blockers.";
+                return "Network Error: Free Keyless AI library failed to load. Please check your network connection or disable ad blockers.";
             }
             try {
                 const messages = [
                     { role: "system", content: systemPrompt },
                     { role: "user", content: promptText }
                 ];
+                let response;
                 try {
-                    return await puter.ai.chat(messages, { model: 'gpt-4o-mini' });
+                    response = await puter.ai.chat(messages, { model: 'gpt-4o-mini' });
                 } catch (e) {
-                    return await puter.ai.chat(messages);
+                    response = await puter.ai.chat(messages);
                 }
+                
+                if (response && typeof response === "object") {
+                    if (response.message && response.message.content) {
+                        return String(response.message.content);
+                    }
+                    return String(response);
+                }
+                return String(response || "");
             } catch (e) {
-                console.error("Puter AI Chat request failed:", e);
-                return `Puter AI Error: ${e.message || "Failed to get response from Puter free model"}.`;
+                console.error("AI Chat request failed:", e);
+                return `AI Error: ${e.message || "Failed to get response from free model"}.`;
             }
         }
     </script>
