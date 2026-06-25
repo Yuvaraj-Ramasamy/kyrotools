@@ -158,23 +158,34 @@
                     <i data-lucide="sparkles"></i> Generate Brand Names
                 </button>
                 
-                <!-- API Settings Card -->
+                <!-- AI Engine & API Settings Card -->
                 <div class="api-key-settings mt-4" style="border-top: 1px solid var(--border-color); padding-top: 16px;">
                     <details style="cursor: pointer;">
                         <summary style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500; outline: none; margin-bottom: 8px;">
-                            <i data-lucide="key" style="width: 14px; height: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i> API Key Settings (Optional)
+                            <i data-lucide="cpu" style="width: 14px; height: 14px; display: inline; vertical-align: middle; margin-right: 4px;"></i> AI Engine Settings
                         </summary>
-                        <div style="padding-top: 10px; cursor: default;">
-                            <div class="form-group" style="margin-bottom: 8px;">
-                                <input type="password" id="custom-api-key" placeholder="Enter custom OpenAI API Key" style="font-size: 0.85rem; padding: 8px 12px; width: 100%;">
+                        <div style="padding-top: 10px; cursor: default;" onclick="event.stopPropagation();">
+                            <div class="form-group" style="margin-bottom: 12px;">
+                                <label for="ai-provider" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;">Select AI Provider</label>
+                                <select id="ai-provider" style="font-size: 0.85rem; padding: 8px; width: 100%; background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 4px;">
+                                    <option value="puter" selected>Keyless Free AI (Puter.js - No Key Needed)</option>
+                                    <option value="gemini">Google Gemini (100% Free Key Tier)</option>
+                                    <option value="openai">OpenAI (Paid Key Required)</option>
+                                </select>
                             </div>
-                            <div style="display: flex; gap: 8px;">
-                                <button id="save-api-key-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; flex: 1;">Save Key</button>
-                                <button id="reset-api-key-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; flex: 1; border-color: var(--danger); color: var(--danger);">Reset Key</button>
+                            
+                            <div id="api-key-input-container" class="form-group" style="margin-bottom: 12px; display: none;">
+                                <label id="api-key-label" for="custom-api-key" style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px; display: block;">API Key</label>
+                                <input type="password" id="custom-api-key" placeholder="Enter API Key" style="font-size: 0.85rem; padding: 8px 12px; width: 100%;">
+                                <div id="key-link-container" style="margin-top: 6px; font-size: 0.75rem; line-height: 1.4;">
+                                    <!-- Dynamic link injected here -->
+                                </div>
                             </div>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
-                                Defaults to seeded project key. Paste your own key here if it has expired or run out of quota.
-                            </p>
+                            
+                            <div style="display: flex; gap: 8px; margin-top: 12px;">
+                                <button id="save-ai-settings-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; flex: 1;">Save Settings</button>
+                                <button id="reset-ai-settings-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.75rem; flex: 1; border-color: var(--danger); color: var(--danger);">Reset Defaults</button>
+                            </div>
                         </div>
                     </details>
                 </div>
@@ -203,6 +214,7 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="https://js.puter.com/v2/"></script>
     
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -212,42 +224,87 @@
             const generateBtn = document.getElementById("generate-names-btn");
             const resultsContainer = document.getElementById("names-results-container");
 
-            // API Key management
+            // AI Settings Management
+            const aiProviderSelect = document.getElementById("ai-provider");
+            const apiKeyInputContainer = document.getElementById("api-key-input-container");
+            const apiKeyLabel = document.getElementById("api-key-label");
             const customApiKeyInput = document.getElementById("custom-api-key");
-            const saveApiKeyBtn = document.getElementById("save-api-key-btn");
-            const resetApiKeyBtn = document.getElementById("reset-api-key-btn");
+            const keyLinkContainer = document.getElementById("key-link-container");
+            const saveSettingsBtn = document.getElementById("save-ai-settings-btn");
+            const resetSettingsBtn = document.getElementById("reset-ai-settings-btn");
 
-            // Display current saved key (obfuscated)
-            const currentSavedKey = localStorage.getItem('openai-api-key');
-            if (currentSavedKey) {
-                const p1 = "sk-proj-g72BfJoLXVfz0lnW5AzfM";
-                const p2 = "ZWHk4f8ZoYrzwTXMxaTG3Hjq1ljczJFpnmTouUG1xaAVbT7ZPBy9eT3B";
-                const p3 = "lbkFJRtGbNZRhczobbADp52vO-dnanUcza8gGLi62c5C5AaTea5pVF4-7fIf3BVPi6gRyMPoGC8QzkA";
-                const defaultKey = p1 + p2 + p3;
-                if (currentSavedKey === defaultKey) {
-                    customApiKeyInput.placeholder = "Using seeded default key";
+            function updateSettingsUI() {
+                const provider = aiProviderSelect.value;
+                if (provider === "puter") {
+                    apiKeyInputContainer.style.display = "none";
                 } else {
-                    customApiKeyInput.value = currentSavedKey;
+                    apiKeyInputContainer.style.display = "block";
+                    if (provider === "gemini") {
+                        apiKeyLabel.textContent = "Google Gemini API Key";
+                        customApiKeyInput.placeholder = "Enter Gemini API Key";
+                        keyLinkContainer.innerHTML = `<a href="https://aistudio.google.com/" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight:600;">Get Free Gemini API Key from Google AI Studio (No billing details required)</a>`;
+                        
+                        const savedGeminiKey = localStorage.getItem("gemini-api-key");
+                        customApiKeyInput.value = savedGeminiKey || "";
+                    } else if (provider === "openai") {
+                        apiKeyLabel.textContent = "OpenAI API Key";
+                        customApiKeyInput.placeholder = "Enter OpenAI API Key (sk-...)";
+                        keyLinkContainer.innerHTML = `<a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight:600;">Get OpenAI API Key (Requires Paid Plan)</a>`;
+                        
+                        const savedOpenAIKey = localStorage.getItem("openai-api-key");
+                        const p1 = "sk-proj-g72BfJoLXVfz0lnW5AzfM";
+                        const p2 = "ZWHk4f8ZoYrzwTXMxaTG3Hjq1ljczJFpnmTouUG1xaAVbT7ZPBy9eT3B";
+                        const p3 = "lbkFJRtGbNZRhczobbADp52vO-dnanUcza8gGLi62c5C5AaTea5pVF4-7fIf3BVPi6gRyMPoGC8QzkA";
+                        const defaultKey = p1 + p2 + p3;
+                        
+                        if (savedOpenAIKey && savedOpenAIKey !== defaultKey) {
+                            customApiKeyInput.value = savedOpenAIKey;
+                        } else {
+                            customApiKeyInput.value = "";
+                            customApiKeyInput.placeholder = "Using seeded default key (often expired)";
+                        }
+                    }
                 }
             }
 
-            saveApiKeyBtn.addEventListener("click", (e) => {
+            // Initialize values from localStorage
+            const savedProvider = localStorage.getItem("ai-provider") || "puter";
+            aiProviderSelect.value = savedProvider;
+            updateSettingsUI();
+
+            aiProviderSelect.addEventListener("change", updateSettingsUI);
+
+            saveSettingsBtn.addEventListener("click", (e) => {
                 e.preventDefault();
-                const newKey = customApiKeyInput.value.trim();
-                if (newKey) {
-                    localStorage.setItem('openai-api-key', newKey);
-                    alert("API Key saved successfully!");
+                const provider = aiProviderSelect.value;
+                localStorage.setItem("ai-provider", provider);
+                
+                if (provider !== "puter") {
+                    const key = customApiKeyInput.value.trim();
+                    if (key) {
+                        if (provider === "gemini") {
+                            localStorage.setItem("gemini-api-key", key);
+                        } else if (provider === "openai") {
+                            localStorage.setItem("openai-api-key", key);
+                        }
+                        alert(`${provider === "gemini" ? "Gemini" : "OpenAI"} API Key and provider settings saved!`);
+                    } else {
+                        alert("Please enter a valid API key.");
+                    }
                 } else {
-                    alert("Please enter a valid API key.");
+                    alert("AI Engine settings saved (using Puter.js keyless free access)!");
                 }
             });
 
-            resetApiKeyBtn.addEventListener("click", (e) => {
+            resetSettingsBtn.addEventListener("click", (e) => {
                 e.preventDefault();
-                localStorage.removeItem('openai-api-key');
+                localStorage.removeItem("ai-provider");
+                localStorage.removeItem("gemini-api-key");
+                localStorage.removeItem("openai-api-key");
+                aiProviderSelect.value = "puter";
                 customApiKeyInput.value = "";
-                customApiKeyInput.placeholder = "Using seeded default key";
-                alert("Reset to seeded default API key.");
+                updateSettingsUI();
+                alert("AI Engine reset to defaults (Puter.js keyless free access).");
             });
 
             generateBtn.addEventListener("click", async () => {
@@ -265,9 +322,10 @@
                 const length = lengthSelect.value;
                 const prompt = `Generate exactly 8 distinct, professional, and catchy business name ideas for a company in this space: "${keywords}". The brand vibe should be "${style}" and the name lengths should be roughly "${length}". For each business name suggestion, provide a brief, creative 1-sentence tagline. Format the response strictly as a JSON array of objects with keys "name" and "tagline". Output ONLY valid JSON inside markdown block.`;
 
-                const responseText = await callOpenAI(prompt);
+                const systemPrompt = "You are a professional brand advisor and copywriter specializing in naming companies.";
+                const responseText = await callAI(systemPrompt, prompt);
                 
-                if (responseText.startsWith("API Error") || responseText.startsWith("Network Error")) {
+                if (responseText.startsWith("API Error") || responseText.startsWith("Network Error") || responseText.startsWith("Setup Required") || responseText.startsWith("Puter AI Error")) {
                     resultsContainer.innerHTML = `
                         <div style="color: var(--danger); text-align: center; padding: 20px 0;">
                             <strong>AI Request Failed:</strong>
@@ -319,46 +377,111 @@
             alert(`Copied "${name}" to clipboard!`);
         }
 
-        async function callOpenAI(promptText) {
-            let apiKey = localStorage.getItem('openai-api-key');
-            if (!apiKey) {
-                const p1 = "sk-proj-g72BfJoLXVfz0lnW5AzfM";
-                const p2 = "ZWHk4f8ZoYrzwTXMxaTG3Hjq1ljczJFpnmTouUG1xaAVbT7ZPBy9eT3B";
-                const p3 = "lbkFJRtGbNZRhczobbADp52vO-dnanUcza8gGLi62c5C5AaTea5pVF4-7fIf3BVPi6gRyMPoGC8QzkA";
-                apiKey = p1 + p2 + p3;
-                localStorage.setItem('openai-api-key', apiKey);
-            }
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-3.5-turbo',
-                        messages: [
-                            { role: "system", content: "You are a professional brand advisor and copywriter specializing in naming companies." },
-                            { role: "user", content: promptText }
-                        ],
-                        max_tokens: 450,
-                        temperature: 0.8
-                    })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    if (data.choices && data.choices[0]) {
-                        return data.choices[0].message.content.trim();
-                    }
-                    return "Error: Empty response choices returned from OpenAI.";
-                } else {
-                    const msg = data.error?.message || response.statusText || "Unknown error";
-                    return `API Error (${response.status}): ${msg}`;
+        async function callAI(systemPrompt, promptText) {
+            const provider = localStorage.getItem("ai-provider") || "puter";
+            
+            if (provider === "puter") {
+                if (typeof puter === "undefined") {
+                    return "Network Error: Free Keyless AI library (Puter.js) failed to load. Please check your network connection or disable ad blockers.";
                 }
-            } catch (e) {
-                console.error("OpenAI request failed:", e);
-                return `Network Error: ${e.message || "Failed to contact OpenAI"}.`;
+                try {
+                    const messages = [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: promptText }
+                    ];
+                    try {
+                        return await puter.ai.chat(messages, { model: 'gpt-4o-mini' });
+                    } catch (e) {
+                        return await puter.ai.chat(messages);
+                    }
+                } catch (e) {
+                    console.error("Puter AI Chat request failed:", e);
+                    return `Puter AI Error: ${e.message || "Failed to get response from Puter free model"}.`;
+                }
             }
+            
+            if (provider === "gemini") {
+                const apiKey = localStorage.getItem("gemini-api-key");
+                if (!apiKey) {
+                    return "Setup Required: Google Gemini API Key is missing. Please go to AI Engine Settings, click the link to get a free key from Google AI Studio, and save it.";
+                }
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                    const data = {
+                        contents: [{
+                            role: "user",
+                            parts: [{ text: promptText }]
+                        }],
+                        systemInstruction: {
+                            parts: [{ text: systemPrompt }]
+                        }
+                    };
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    if (response.ok) {
+                        if (result.candidates && result.candidates[0] && result.candidates[0].content && result.candidates[0].content.parts[0]) {
+                            return result.candidates[0].content.parts[0].text;
+                        }
+                        return "Error: Empty response returned from Gemini.";
+                    } else {
+                        const msg = result.error?.message || response.statusText || "Unknown error";
+                        return `Gemini API Error (${response.status}): ${msg}`;
+                    }
+                } catch (e) {
+                    console.error("Gemini request failed:", e);
+                    return `Network Error: ${e.message || "Failed to contact Gemini API"}.`;
+                }
+            }
+            
+            if (provider === "openai") {
+                let apiKey = localStorage.getItem('openai-api-key');
+                if (!apiKey) {
+                    const p1 = "sk-proj-g72BfJoLXVfz0lnW5AzfM";
+                    const p2 = "ZWHk4f8ZoYrzwTXMxaTG3Hjq1ljczJFpnmTouUG1xaAVbT7ZPBy9eT3B";
+                    const p3 = "lbkFJRtGbNZRhczobbADp52vO-dnanUcza8gGLi62c5C5AaTea5pVF4-7fIf3BVPi6gRyMPoGC8QzkA";
+                    apiKey = p1 + p2 + p3;
+                    localStorage.setItem('openai-api-key', apiKey);
+                }
+                try {
+                    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: 'gpt-3.5-turbo',
+                            messages: [
+                                { role: "system", content: systemPrompt },
+                                { role: "user", content: promptText }
+                            ],
+                            max_tokens: 450,
+                            temperature: 0.8
+                        })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        if (data.choices && data.choices[0]) {
+                            return data.choices[0].message.content.trim();
+                        }
+                        return "Error: Empty response choices returned from OpenAI.";
+                    } else {
+                        const msg = data.error?.message || response.statusText || "Unknown error";
+                        return `OpenAI API Error (${response.status}): ${msg}`;
+                    }
+                } catch (e) {
+                    console.error("OpenAI request failed:", e);
+                    return `Network Error: ${e.message || "Failed to contact OpenAI"}.`;
+                }
+            }
+            
+            return "Error: Unknown AI Engine provider selected.";
         }
     </script>
     
