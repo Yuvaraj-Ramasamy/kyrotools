@@ -1512,17 +1512,27 @@ html, body {
     }
     .dropdown-content {
         position: static;
-        display: block;
+        display: none; /* Collapse by default on mobile */
         box-shadow: none;
         border: none;
-        padding-left: 0;
-        background: transparent;
+        padding: 8px 0;
+        background: rgba(255, 255, 255, 0.02); /* Clean visual grouping */
+        border-radius: var(--radius-sm);
+        margin-top: 4px;
         transform: none;
         min-width: 100%;
     }
+    .dropdown.active .dropdown-content {
+        display: block; /* Expand when active */
+    }
     .dropdown-content a {
-        padding: 8px 0;
+        padding: 10px 0;
         font-size: 0.95rem;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    }
+    .dropdown-content a:last-child {
+        border-bottom: none;
     }
 }
 
