@@ -203,9 +203,16 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="assets/js/theme.js"></script>
-    <script src="https://js.puter.com/v2/"></script>
     
     <script>
+        // Dynamically load Puter.js if not running from file:///
+        const isLocalFile = window.location.protocol === 'file:';
+        if (!isLocalFile) {
+            const script = document.createElement('script');
+            script.src = 'https://js.puter.com/v2/';
+            document.head.appendChild(script);
+        }
+
         const chatContainer = document.getElementById("chat-messages-container");
         const userInput = document.getElementById("chat-user-input");
         const sendBtn = document.getElementById("chat-send-btn");
@@ -259,7 +266,28 @@
         }
 
         // Initialize values from localStorage
-        const savedProvider = localStorage.getItem("ai-provider") || "puter";
+        if (isLocalFile) {
+            const puterOption = aiProviderSelect.querySelector('option[value="puter"]');
+            if (puterOption) {
+                puterOption.disabled = true;
+                puterOption.textContent = "Keyless Free AI (Requires Web Server)";
+            }
+            
+            // Add warnings if running via file://
+            const helperMsg = document.createElement("p");
+            helperMsg.id = "local-file-warning";
+            helperMsg.style.cssText = "font-size: 0.75rem; color: var(--warning); margin-top: 8px; line-height: 1.4;";
+            helperMsg.innerHTML = `⚠️ Puter.js Keyless AI is disabled because this file was opened directly via <code>file:///</code>. Run a local web server or host on GitHub Pages to use it. Please use Gemini (Free Key) or OpenAI.`;
+            aiProviderSelect.parentNode.appendChild(helperMsg);
+        }
+
+        let savedProvider = localStorage.getItem("ai-provider");
+        if (isLocalFile && (!savedProvider || savedProvider === "puter")) {
+            savedProvider = "gemini";
+        } else if (!savedProvider) {
+            savedProvider = "puter";
+        }
+        
         aiProviderSelect.value = savedProvider;
         updateSettingsUI();
 
