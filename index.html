@@ -190,6 +190,85 @@
                 font-size: 2.5rem;
             }
         }
+        
+        /* KyroGPT Premium Card Styles */
+        .kyrogpt-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(236, 72, 153, 0.12)) !important;
+            border: 2px solid rgba(139, 92, 246, 0.3) !important;
+            box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.1) !important;
+            grid-column: span 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .kyrogpt-card:hover {
+            border-color: rgba(236, 72, 153, 0.6) !important;
+            box-shadow: 0 0 35px rgba(129, 140, 248, 0.25), 0 0 30px rgba(236, 72, 153, 0.2) !important;
+            transform: translateY(-5px);
+        }
+        .kyrogpt-icon {
+            background: linear-gradient(135deg, #6366f1, #ec4899) !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+        .kyrogpt-title {
+            background: linear-gradient(90deg, #a5b4fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .premium-badge {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: #fff;
+            -webkit-text-fill-color: #fff;
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .kyrogpt-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .feature-tag {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+        .kyrogpt-card:hover .feature-tag {
+            border-color: rgba(139, 92, 246, 0.2);
+            background: rgba(139, 92, 246, 0.05);
+            color: var(--text-primary);
+        }
+        .feature-tag i {
+            width: 12px;
+            height: 12px;
+        }
+        @media (min-width: 768px) {
+            .kyrogpt-card-wide {
+                grid-column: span 2;
+            }
+            .kyrogpt-card-content {
+                display: flex;
+                gap: 20px;
+            }
+            .kyrogpt-card-content .tool-icon {
+                flex-shrink: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -232,13 +311,7 @@
                     </div>
                 </div>
 
-                <div class="dropdown">
-                    <a href="#" class="nav-link">AI Workspace <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
-                    <div class="dropdown-content">
-                        <a href="freelancer-ai.html">AI Freelancer Assistant</a>
-                        <a href="business-name-generator.html">AI Business Name Gen</a>
-                    </div>
-                </div>
+                <a href="kyrogpt.html" class="nav-link">KyroGPT</a>
             </nav>
             
             <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle navigation menu">
@@ -256,6 +329,22 @@
 
         <!-- Tools Grid -->
         <section class="tools-grid">
+            
+            <!-- Premium Tool: KyroGPT -->
+            <div class="tool-card kyrogpt-card kyrogpt-card-wide" onclick="window.location.href='kyrogpt.html'">
+                <div class="kyrogpt-card-content">
+                    <div class="tool-icon kyrogpt-icon"><i data-lucide="sparkles"></i></div>
+                    <div>
+                        <h3 class="tool-title kyrogpt-title">KyroGPT <span class="premium-badge">AI Workspace</span></h3>
+                        <p class="tool-desc">Your ultimate premium AI assistant. Brainstorm catchy brand names, consult the Freelance Operations Copilot, and polish/enhance cover letters, resumes, or emails in real-time. Built entirely client-side with no keys required.</p>
+                    </div>
+                </div>
+                <div class="kyrogpt-features">
+                    <span class="feature-tag"><i data-lucide="message-square"></i> Advisor Chat</span>
+                    <span class="feature-tag"><i data-lucide="tag"></i> Name Generator</span>
+                    <span class="feature-tag"><i data-lucide="zap"></i> Smart Enhancer</span>
+                </div>
+            </div>
             
             <!-- Tool 1: Invoice Generator -->
             <div class="tool-card" onclick="window.location.href='invoice-generator.html'">
@@ -387,25 +476,7 @@
                 <span class="tool-tag">Financial</span>
             </div>
 
-            <!-- Tool 14: AI Freelancer Assistant -->
-            <div class="tool-card" onclick="window.location.href='freelancer-ai.html'">
-                <div>
-                    <div class="tool-icon"><i data-lucide="bot"></i></div>
-                    <h3 class="tool-title">AI Freelancer Copilot</h3>
-                    <p class="tool-desc">Ask queries regarding contracts, client emails, pitch proposals, scope of work, and project rates. Secure AI chatbot workspace.</p>
-                </div>
-                <span class="tool-tag">AI Powered</span>
-            </div>
 
-            <!-- Tool 15: AI Business Name Generator -->
-            <div class="tool-card" onclick="window.location.href='business-name-generator.html'">
-                <div>
-                    <div class="tool-icon"><i data-lucide="sparkles"></i></div>
-                    <h3 class="tool-title">AI Business Name Gen</h3>
-                    <p class="tool-desc">Discover catchy, brandable business name ideas. Filters results by industry, keyword, name length, and target brand persona.</p>
-                </div>
-                <span class="tool-tag">AI Powered</span>
-            </div>
 
         </section>
 

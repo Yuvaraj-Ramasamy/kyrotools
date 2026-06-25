@@ -94,13 +94,7 @@
                     </div>
                 </div>
 
-                <div class="dropdown">
-                    <a href="#" class="nav-link">AI Workspace <i data-lucide="chevron-down" style="width: 14px; height: 14px; display: inline; vertical-align: middle;"></i></a>
-                    <div class="dropdown-content">
-                        <a href="freelancer-ai.html">AI Freelancer Assistant</a>
-                        <a href="business-name-generator.html">AI Business Name Gen</a>
-                    </div>
-                </div>
+                <a href="kyrogpt.html" class="nav-link">KyroGPT</a>
             </nav>
             
             <div class="nav-actions">
@@ -297,11 +291,20 @@
                     { role: "system", content: systemPrompt },
                     { role: "user", content: promptText }
                 ];
+                let response;
                 try {
-                    return await puter.ai.chat(messages, { model: 'gpt-4o-mini' });
+                    response = await puter.ai.chat(messages, { model: 'gpt-4o-mini' });
                 } catch (e) {
-                    return await puter.ai.chat(messages);
+                    response = await puter.ai.chat(messages);
                 }
+                
+                if (response && typeof response === "object") {
+                    if (response.message && response.message.content) {
+                        return String(response.message.content);
+                    }
+                    return String(response);
+                }
+                return String(response || "");
             } catch (e) {
                 console.error("Puter AI Chat request failed:", e);
                 return `Puter AI Error: ${e.message || "Failed to get response from Puter free model"}.`;
